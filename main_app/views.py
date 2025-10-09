@@ -9,7 +9,11 @@ def home(request):
       return render(request, 'main_app/home.html')
 
 def skills_list(request):
-      return render(request, 'main_app/skills_list.html')
+      if request.user.is_authenticaed:
+            skills = Skill.objects.filter(user=request.user)
+            return render(request, 'main_app/skills_list.html', {'skills': skills})
+      else:
+            return redirect('main_app:loging')
 
 def projects_list(request):
       return render(request, 'main_app/projects_list.html')

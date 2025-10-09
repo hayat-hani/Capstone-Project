@@ -1,9 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-def home(request):
-    # Send a simple HTML response
-    return HttpResponse('<h1>Hello</h1>')
+from .models import Skill, Project, Task, Reflection
 
-def about(request):
-    return render(request, 'about.html')
+def home(request):
+      return render(request, 'main_app/home.html')
+
+def skills_list(request):
+      return render(request, 'main_app/skills_list.html')
+
+def projects_list(request):
+      return render(request, 'main_app/projects_list.html')

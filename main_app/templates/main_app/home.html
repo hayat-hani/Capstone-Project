@@ -1,0 +1,14 @@
+{% extends 'main_app/base.html' %}
+
+  {% block content %}
+  <h2>Welcome to SkillHub</h2>
+  <p>Track your skills and projects to achieve your goals!</p>     
+
+  <div>
+      <h3>Quick Actions</h3>
+      <ul>
+          <li><a href="{% url 'main_app:skills_list' %}">View Skills</a></li>
+          <li><a href="{% url 'main_app:projects_list' %}">View Projects</a></li>
+      </ul>
+  </div>
+  {% endblock %}

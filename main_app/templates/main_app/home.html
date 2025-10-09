@@ -1,14 +1,42 @@
 {% extends 'main_app/base.html' %}
 
-  {% block content %}
-  <h2>Welcome to SkillHub</h2>
-  <p>Track your skills and projects to achieve your goals!</p>     
+{% block content %}
+<h2>Welcome to SkillHub</h2>
 
-  <div>
-      <h3>Quick Actions</h3>
-      <ul>
-          <li><a href="{% url 'main_app:skills_list' %}">View Skills</a></li>
-          <li><a href="{% url 'main_app:projects_list' %}">View Projects</a></li>
-      </ul>
-  </div>
-  {% endblock %}
+{% if user.is_authenticated %}
+    <diV class="card">
+        <p>Hi, {{ user.username }}! 👋</p>
+    </div>
+
+    <diV class="card">
+        <h3>Your Skills ({{ skills.count }})</h3>
+        {% if skills %}
+            <ul>
+                {% for skill in skills %}
+                    <li class="skill-item">{{ skill.title }} - {{ skill.progress }}%</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No skills added yet.</p>
+        {% endif %}
+    </div>
+
+    <diV class="card">
+        <h3>Your Projects ({{ projects.count }})</h3>
+        {% if projects %}
+            <ul>
+                {% for project in projects %}
+                    <li class="project-item">{{ project.title }} - {{ project.progress }}%</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No projects added yet.</p>
+        {% endif %}
+    </div>
+{% else %}
+    <diV class="card">
+        <p>Track your skills and projects to achieve your goals!</p>     
+        <p><a href="{% url 'main_app:login' %}">Login to get started</a></p>
+    <diV> 
+{% endif %}
+{% endblock %}

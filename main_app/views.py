@@ -6,7 +6,12 @@ from django.contrib.auth.models import User
 from .models import Skill, Project, Task, Reflection
 
 def home(request):
-      return render(request, 'main_app/home.html')
+      if request.user.is_authenticated:
+          skills = Skill.objects.filter(user=request.user)
+          projects = Project.objects.filter(user=request.user)
+          return render(request, 'main_app/home.html', {'skills': skills, 'projects': projects})
+      else:
+            return render(request, 'main_app/home.html')
 
 def skills_list(request):
       if request.user.is_authenticated:

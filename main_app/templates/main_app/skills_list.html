@@ -1,12 +1,22 @@
 {% extends 'main_app/base.html' %}
 
-  {% block content %}
-  <h2>My Skills</h2>
+{% block content %}
+<h2>My Skills</h2>
 
-  <p>Here are your skills:</p>
+{% if skills %}
+  <ul>
+    {% for skill in skills %}
+      <li>
+        <h3>{{ skill.title }}</h3>
+        <p>{{ skill.description }}</p>
+        <p>Category: {{ skill.category }}</p>
+        <p>Progress: {{ skill.progress }}%</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No skills added yet.</p>
+{% endif %}
 
-  <div>
-      <p>No skills added yet.</p>
-      <a href="/">Back to Home</a>
-  </div>
-  {% endblock %}
+<a href="/">Back to Home</a>
+{% endblock %}

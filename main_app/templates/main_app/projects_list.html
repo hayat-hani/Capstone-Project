@@ -1,12 +1,24 @@
 {% extends 'main_app/base.html' %}
 
-  {% block content %}
+
+{% block content %}
   <h2>My Projects</h2>
 
-  <p>Here are your projects:</p>
+  
+{% if projects %}
+  <ul>
+    {% for project in projects %}
+      <li>
+        <h3>{{ project.title }}</h3>
+          <p>{{ project.description }}</p>
+          <p>Progress: {{ project.progress }}%</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No projects added yet.</p>
+{% endif %}
 
-  <div>
-      <p>No projects added yet.</p>
-      <a href="/">Back to Home</a>
-  </div>
-  {% endblock %}
+
+<a href="/">Back to Home</a>
+{% endblock %}

@@ -9,7 +9,13 @@
       <nav>
           <h1>SkillHub</h1>
           <ul>
-              <li><a href="/">Home</a></li>
+                <li><a href="/">Home</a></li>
+                {%if user.is_authenticated %}
+                    <li><a href="{% url 'main_app:logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'main_app:login' %}">Login</a></li>
+                {% endif %}
+              
           </ul>
       </nav>
 

@@ -6,9 +6,6 @@
 2. [Tech Stack](#tech-stack)
 3. [User Stories](#user-stories)
 4. [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd)
-5. [Installation Guide](#installation-guide)
-6. [Future Features / Stretch Goals](#future-features--stretch-goals)
-
 ---
 
 ## Project Description
@@ -67,6 +64,6 @@ SkillHub is a Django web application that allows users to track personal growth 
 20. As a user, I want to upload files or images related to skills/projects.  
 
 ---
-## ERD
+## Entity Relationship Diagram (ERD)
 
 ![SkillHub ERD](assets/erd.png)

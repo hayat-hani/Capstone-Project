@@ -54,8 +54,7 @@ def user_signup(request):
               return redirect('main_app:home')
       else:
           form = UserCreationForm()
-      return render(request, 'main_app/signup.html', {'form':
-  form})
+      return render(request, 'main_app/signup.html', {'form': form})
 
 
 def skill_create(request):
@@ -70,5 +69,31 @@ def skill_create(request):
           else:
               form = SkillForm()
           return render(request, 'main_app/skill_form.html',{'form': form, 'action': 'Add'})
+      else:
+          return redirect('main_app:login')
+      
+
+def skill_edit(request, skill_id):
+      if request.user.is_authenticated:
+          skill = Skill.objects.get(id=skill_id, user=request.user)
+          if request.method == 'POST':
+              form = SkillForm(request.POST, instance=skill)
+              if form.is_valid():
+                  form.save()
+                  return redirect('main_app:skills_list')
+          else:
+              form = SkillForm(instance=skill)
+          return render(request, 'main_app/skill_form.html',
+  {'form': form, 'action': 'Edit'})
+      else:
+          return redirect('main_app:login')
+
+def skill_delete(request, skill_id):
+      if request.user.is_authenticated:
+          skill = Skill.objects.get(id=skill_id, user=request.user)
+          if request.method == 'POST':
+              skill.delete()
+              return redirect('main_app:skills_list')
+          return render(request, 'main_app/skill_confirm_delete.html', {'skill': skill})
       else:
           return redirect('main_app:login')

@@ -12,6 +12,10 @@
         <p>{{ skill.description }}</p>
         <p>Category: {{ skill.category }}</p>
         <p>Progress: {{ skill.progress }}%</p>
+        <div class="skill-actions">
+        <a href="{% url 'main_app:skill_edit' skill.id %}" class="btn-edit">Edit</a>
+        <a href="{% url 'main_app:skill_delete' skill.id %}" class="btn-delete">Delete</a>
+        </div>
       </li>
     {% endfor %}
   </ul>

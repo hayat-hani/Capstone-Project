@@ -43,3 +43,15 @@ def user_logout(request):
       logout(request)
       return redirect('main_app:home')
 
+
+def user_signup(request):
+      if request.method == 'POST':
+          form = UserCreationForm(request.POST)
+          if form.is_valid():
+              user = form.save()
+              login(request, user)
+              return redirect('main_app:home')
+      else:
+          form = UserCreationForm()
+      return render(request, 'main_app/signup.html', {'form':
+  form})

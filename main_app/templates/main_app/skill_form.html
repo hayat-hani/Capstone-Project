@@ -1,0 +1,13 @@
+{% extends 'main_app/base.html' %}
+
+  {% block content %}
+  <div class="form-container">
+      <h2>{{ action }} Skill</h2>
+      <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">{{ action }} Skill</button>
+          <a href="{% url 'main_app:skills_list' %}" class="btn-secondary">Cancel</a>
+      </form>
+  </div>
+  {% endblock %}

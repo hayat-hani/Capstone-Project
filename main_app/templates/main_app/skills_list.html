@@ -2,6 +2,7 @@
 
 {% block content %}
 <h2>My Skills</h2>
+<a href="{% url 'main_app:skill_create' %}" class="btn-primary">Add New Skill</a>
 
 {% if skills %}
   <ul>

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .forms import SkillForm
 
 from .models import Skill, Project, Task, Reflection
 
@@ -55,3 +56,19 @@ def user_signup(request):
           form = UserCreationForm()
       return render(request, 'main_app/signup.html', {'form':
   form})
+
+
+def skill_create(request):
+      if request.user.is_authenticated:
+          if request.method == 'POST':
+              form = SkillForm(request.POST)
+              if form.is_valid():
+                  skill = form.save(commit=False)
+                  skill.user = request.user
+                  skill.save()
+                  return redirect('main_app:skills_list')
+          else:
+              form = SkillForm()
+          return render(request, 'main_app/skill_form.html',{'form': form, 'action': 'Add'})
+      else:
+          return redirect('main_app:login')

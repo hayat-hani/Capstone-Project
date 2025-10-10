@@ -1,0 +1,14 @@
+{% extends 'main_app/base.html' %}
+
+  {% block content %}
+  <div class="form-container">
+      <h2>{{ action }} Project </h2>
+      <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">{{ action }} Proejct </button>
+          <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Cancel</a>
+      </form>
+  </div>
+  {% endblock %}
+

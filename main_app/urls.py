@@ -19,4 +19,5 @@ urlpatterns = [
     path('projects/<int:project_id>/', views.project_detail, name='project_detail'),
     path('skills/<int:skill_id>/add_task/', views.task_create_for_skill, name='task_create_for_skill'),
     path('projects/<int:project_id>/add_task/', views.task_create_for_project, name='task_create_for_project'),
+    path('tasks/<int:task_id>/toggle/', views.task_toggle, name='task_toggle'),
 ]

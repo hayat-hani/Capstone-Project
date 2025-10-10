@@ -201,3 +201,22 @@ def task_create_for_project(request, project_id):
           return render(request, 'main_app/task_form.html', {'form': form, 'project': project, 'action': 'Add'})
       else:
           return redirect('main_app:login')
+      
+
+def task_toggle(request, task_id):
+      if request.user.is_authenticated:
+          task = Task.objects.get(id=task_id)
+          # Make sure task belongs to user's skill or project
+          if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
+              task.is_completed = not task.is_completed
+              task.save()
+
+              # Redirect back to the appropriate detail page
+              if task.skill:
+                  return redirect('main_app:skill_detail', skill_id=task.skill.id)
+              elif task.project:
+                  return redirect('main_app:project_detail', project_id=task.project.id)
+
+          return redirect('main_app:home')
+      else:
+          return redirect('main_app:login')

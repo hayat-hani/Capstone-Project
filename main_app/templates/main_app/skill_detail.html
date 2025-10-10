@@ -1,0 +1,38 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<div class="detail-container">
+    <h2>{{ skill.title }}</h2>
+    <p><strong>Category:</strong> {{ skill.category }}</p>
+    <p><strong>Description:</strong> {{ skill.description }}</p>
+    <p><strong>Progress:</strong> {{ skill.progress }}%</p>
+
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ skill.progress }}%"></div>
+    </div>
+
+    <div class="skill-actions">
+        <a href="{% url 'main_app:skill_edit' skill.id %}" class="btn-edit">Edit Skill</a>
+        <a href="{% url 'main_app:skills_list' %}" class="btn-secondary">Back to Skills</a>
+    </div>
+
+    <h3>Tasks</h3>
+    {% if tasks %}
+        <ul class="task-list">
+        {% for task in tasks %}
+            <li class="task-item {% if task.is_completed %}completed{% endif %}">
+                <h4>{{ task.title }}</h4>
+                <p>{{ task.description }}</p>
+                <span class="task-status">
+                    {% if task.is_completed %}✓ Completed{% else %}○ Pending{% endif %}
+                </span>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks added yet.</p>
+    {% endif %}
+
+    <a href="{% url 'main_app:task_create_for_skill' skill.id %}" class="btn-primary">Add Task</a>
+</div>
+{% endblock %}

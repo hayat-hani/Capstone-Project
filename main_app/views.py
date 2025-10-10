@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SkillForm, ProjectForm
+from .forms import SkillForm, ProjectForm, TaskForm
 
 from .models import Skill, Project, Task, Reflection
 
@@ -135,5 +135,69 @@ def project_delete(request, project_id):
               project.delete()
               return redirect('main_app:projects_list')
           return render(request, 'main_app/project_confirm_delete.html', {'project': project})
+      else:
+          return redirect('main_app:login')
+      
+
+
+def skill_detail(request, skill_id):
+      if request.user.is_authenticated:
+          skill = Skill.objects.get(id=skill_id,
+  user=request.user)
+          tasks = Task.objects.filter(skill=skill)
+          return render(request, 'main_app/skill_detail.html',
+  {'skill': skill, 'tasks': tasks})
+      else:
+          return redirect('main_app:login')
+      
+
+def skill_detail(request, skill_id):
+      if request.user.is_authenticated:
+          skill = Skill.objects.get(id=skill_id, user=request.user)
+          tasks = Task.objects.filter(skill=skill)
+          return render(request, 'main_app/skill_detail.html', {'skill': skill, 'tasks': tasks})
+      else:
+          return redirect('main_app:login')
+      
+
+def project_detail(request, project_id):
+      if request.user.is_authenticated:
+          project = Project.objects.get(id=project_id, user=request.user)
+          tasks = Task.objects.filter(project=project)
+          return render(request, 'main_app/project_detail.html', {'project': project, 'tasks': tasks})
+      else:
+          return redirect('main_app:login')
+      
+
+def task_create_for_skill(request, skill_id):
+      if request.user.is_authenticated:
+          skill = Skill.objects.get(id=skill_id, user=request.user)
+          if request.method == 'POST':
+              form = TaskForm(request.POST)
+              if form.is_valid():
+                  task = form.save(commit=False)
+                  task.skill = skill
+                  task.save()
+                  return redirect('main_app:skill_detail', skill_id=skill_id)
+          else:
+              form = TaskForm()
+          return render(request, 'main_app/task_form.html', {'form': form, 'skill': skill, 'action': 'Add'})
+      else:
+          return redirect('main_app:login')
+      
+
+def task_create_for_project(request, project_id):
+      if request.user.is_authenticated:
+          project = Project.objects.get(id=project_id, user=request.user)
+          if request.method == 'POST':
+              form = TaskForm(request.POST)
+              if form.is_valid():
+                  task = form.save(commit=False)
+                  task.project = project
+                  task.save()
+                  return redirect('main_app:project_detail', project_id=project_id)
+          else:
+              form = TaskForm()
+          return render(request, 'main_app/task_form.html', {'form': form, 'project': project, 'action': 'Add'})
       else:
           return redirect('main_app:login')

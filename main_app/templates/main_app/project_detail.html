@@ -1,0 +1,37 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<div class="detail-container">
+    <h2>{{ project.title }}</h2>
+    <p><strong>Description:</strong> {{ project.description }}</p>
+    <p><strong>Progress:</strong> {{ project.progress }}%</p>
+
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ project.progress }}%"></div>
+    </div>
+
+    <div class="project-actions">
+        <a href="{% url 'main_app:project_edit' project.id %}" class="btn-edit">Edit Project</a>
+        <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Back to Projects</a>
+    </div>
+
+    <h3>Tasks</h3>
+    {% if tasks %}
+        <ul class="task-list">
+        {% for task in tasks %}
+            <li class="task-item {% if task.is_completed %}completed{% endif %}">
+                <h4>{{ task.title }}</h4>
+                <p>{{ task.description }}</p>
+                <span class="task-status">
+                    {% if task.is_completed %}✓ Completed{% else %}○ Pending{% endif %}
+                </span>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks added yet.</p>
+    {% endif %}
+
+    <a href="{% url 'main_app:task_create_for_project' project.id %}" class="btn-primary">Add Task</a>
+</div>
+{% endblock %}

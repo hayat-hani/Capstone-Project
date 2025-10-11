@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SkillForm, ProjectForm, TaskForm
+from .forms import SkillForm, ProjectForm, TaskForm, ReflectionForm
 
 from .models import Skill, Project, Task, Reflection
 
@@ -150,7 +150,8 @@ def skill_detail(request, skill_id):
           skill = Skill.objects.get(id=skill_id, user=request.user)
           skill.save()
           tasks = Task.objects.filter(skill=skill)
-          return render(request, 'main_app/skill_detail.html', {'skill': skill, 'tasks': tasks})
+          reflections = Reflection.objects.filter(skill=skill).order_by('-date')
+          return render(request, 'main_app/skill_detail.html', {'skill': skill, 'tasks': tasks,  'reflections': reflections})
       else:
           return redirect('main_app:login')
       
@@ -160,7 +161,8 @@ def project_detail(request, project_id):
           project = Project.objects.get(id=project_id, user=request.user)
           project.save()
           tasks = Task.objects.filter(project=project)
-          return render(request, 'main_app/project_detail.html', {'project': project, 'tasks': tasks})
+          reflections = Reflection.objects.filter(project=project).order_by('-date')
+          return render(request, 'main_app/project_detail.html', {'project': project, 'tasks': tasks, 'reflections': reflections})
       else:
           return redirect('main_app:login')
       
@@ -212,6 +214,83 @@ def task_toggle(request, task_id):
                   return redirect('main_app:skill_detail', skill_id=task.skill.id)
               elif task.project:
                   return redirect('main_app:project_detail', project_id=task.project.id)
+
+          return redirect('main_app:home')
+      else:
+          return redirect('main_app:login')
+      
+
+def reflection_create_for_skill(request, skill_id):
+      if request.user.is_authenticated:
+          skill = Skill.objects.get(id=skill_id, user=request.user)
+          if request.method == 'POST':
+              form = ReflectionForm(request.POST)
+              if form.is_valid():
+                  reflection = form.save(commit=False)
+                  reflection.skill = skill
+                  reflection.save()
+                  return redirect('main_app:skill_detail', skill_id=skill_id)
+          else:
+              form = ReflectionForm()
+          return render(request, 'main_app/reflection_form.html', {'form': form, 'skill': skill, 'action': 'Add'})
+      else:
+          return redirect('main_app:login')
+      
+
+def reflection_create_for_project(request, project_id):
+      if request.user.is_authenticated:
+          project = Project.objects.get(id=project_id, user=request.user)
+          if request.method == 'POST':
+              form = ReflectionForm(request.POST)
+              if form.is_valid():
+                  reflection = form.save(commit=False)
+                  reflection.project = project
+                  reflection.save()
+                  return redirect('main_app:project_detail', project_id=project_id)
+          else:
+              form = ReflectionForm()
+          return render(request, 'main_app/reflection_form.html', {'form': form, 'project': project, 'action': 'Add'})
+      else:
+          return redirect('main_app:login')
+      
+
+def reflection_edit(request, reflection_id):
+    if request.user.is_authenticated:
+        reflection = Reflection.objects.get(id=reflection_id)
+        # check if user owns this reflection through skill or project
+        if (reflection.skill and reflection.skill.user == request.user) or (reflection.project and reflection.project.user == request.user):
+            if request.method == 'POST':
+                form = ReflectionForm(request.POST, instance=reflection)
+                if form.is_valid():
+                    form.save()
+                    if reflection.skill:
+                        return redirect('main_app:skill_detail', skill_id=reflection.skill.id)
+                    elif reflection.project:
+                        return redirect('main_app:project_detail', project_id=reflection.project.id)
+            else:
+                form = ReflectionForm(instance=reflection)
+            return render(request, 'main_app/reflection_form.html', {'form': form, 'reflection': reflection, 'action': 'Edit'})
+
+        return redirect('main_app:home')
+    else:
+        return redirect('main_app:login')
+
+def reflection_delete(request, reflection_id):
+      if request.user.is_authenticated:
+          reflection = Reflection.objects.get(id=reflection_id)
+          # check if user owns this reflection
+          if (reflection.skill and reflection.skill.user == request.user) or (reflection.project and reflection.project.user == request.user):
+              if request.method == 'POST':
+                  skill_id = reflection.skill.id if reflection.skill else None
+                  project_id = reflection.project.id if reflection.project else None
+                  reflection.delete()
+
+                  if skill_id:
+                      return redirect('main_app:skill_detail', skill_id=skill_id)
+                  elif project_id:
+                      return redirect('main_app:project_detail', project_id=project_id)
+
+              return render(request, 'main_app/reflection_confirm_delete.html', {'reflection': reflection})
 
           return redirect('main_app:home')
       else:

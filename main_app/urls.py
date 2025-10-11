@@ -20,4 +20,8 @@ urlpatterns = [
     path('skills/<int:skill_id>/add_task/', views.task_create_for_skill, name='task_create_for_skill'),
     path('projects/<int:project_id>/add_task/', views.task_create_for_project, name='task_create_for_project'),
     path('tasks/<int:task_id>/toggle/', views.task_toggle, name='task_toggle'),
+    path('skills/<int:skill_id>/add_reflection/', views.reflection_create_for_skill, name='reflection_create_for_skill'),
+    path('projects/<int:project_id>/add_reflection/', views.reflection_create_for_project, name='reflection_create_for_project'),
+    path('reflections/<int:reflection_id>/edit/', views.reflection_edit, name='reflection_edit'),
+    path('reflections/<int:reflection_id>/delete/', views.reflection_delete, name='reflection_delete'),
 ]

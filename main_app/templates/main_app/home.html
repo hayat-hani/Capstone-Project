@@ -1,42 +1,120 @@
 {% extends 'main_app/base.html' %}
 
 {% block content %}
-<h2>Welcome to SkillHub</h2>
-
 {% if user.is_authenticated %}
-    <diV class="card">
-        <p>Hi, {{ user.username }}! 👋</p>
+    <div class="dashboard">
+        <h1>Welcome back, {{ user.username }}! 👋</h1>
+
+        <!-- statistics overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>{{ total_skills }}</h3>
+                <p>Total Skills</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ total_projects }}</h3>
+                <p>Total Projects</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ completed_tasks }}</h3>
+                <p>Completed Tasks</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ completion_rate }}%</h3>
+                <p>Overall Progress</p>
+            </div>
+        </div>
+
+        <!-- progress overview -->
+        <div class="progress-overview">
+            <div class="progress-section">
+                <h3>Skills Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ avg_skill_progress }}%"></div>
+                </div>
+                <p>{{ avg_skill_progress }}% Average</p>
+            </div>
+
+            <div class="progress-section">
+                <h3>Projects Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ avg_project_progress }}%"></div>
+                </div>
+                <p>{{ avg_project_progress }}% Average</p>
+            </div>
+        </div>
+
+        <!-- quick actions -->
+        <div class="quick-actions">
+            <h3>Quick Actions</h3>
+            <a href="{% url 'main_app:skill_create' %}" class="btn-primary">Add New Skill</a>
+            <a href="{% url 'main_app:project_create' %}" class="btn-primary">Add New Project</a>
+            <a href="{% url 'main_app:skills_list' %}" class="btn-secondary">View All Skills</a>
+            <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">View All Projects</a>
+        </div>
+
+        <!-- recent activity -->
+        {% if recent_reflections %}
+        <div class="recent-activity">
+            <h3>Recent Reflections</h3>
+            {% for reflection in recent_reflections %}
+                <div class="activity-item">
+                    <p>"{{ reflection.content|truncatewords:15 }}"</p>
+                    <small>
+                        {% if reflection.skill %}
+                            on {{ reflection.skill.title }} - {{ reflection.date|date:"M d" }}
+                        {% elif reflection.project %}
+                            on {{ reflection.project.title }} - {{ reflection.date|date:"M d" }}
+                        {% endif %}
+                    </small>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- preview lists -->
+        <div class="preview-sections">
+            <div class="preview-section">
+                <h3>Recent Skills</h3>
+                {% if skills %}
+                    {% for skill in skills %}
+                        <div class="preview-item">
+                            <a href="{% url 'main_app:skill_detail' skill.id %}">{{ skill.title }}</a>
+                            <span class="progress-badge">{{ skill.progress }}%</span>
+                        </div>
+                    {% endfor %}
+                    <a href="{% url 'main_app:skills_list' %}" class="view-all">View All →</a>
+                {% else %}
+                    <p>No skills yet. <a href="{% url 'main_app:skill_create' %}">Add your first skill!</a></p>
+                {% endif %}
+            </div>
+
+            <div class="preview-section">
+                <h3>Recent Projects</h3>
+                {% if projects %}
+                    {% for project in projects %}
+                        <div class="preview-item">
+                            <a href="{% url 'main_app:project_detail' project.id %}">{{ project.title }}</a>
+                            <span class="progress-badge">{{ project.progress }}%</span>
+                        </div>
+                    {% endfor %}
+                    <a href="{% url 'main_app:projects_list' %}" class="view-all">View All →</a>
+                {% else %}
+                    <p>No projects yet. <a href="{% url 'main_app:project_create' %}">Add your first project!</a></p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
-    <diV class="card">
-        <h3>Your Skills ({{ skills.count }})</h3>
-        {% if skills %}
-            <ul>
-                {% for skill in skills %}
-                    <li class="skill-item">{{ skill.title }} - {{ skill.progress }}%</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No skills added yet.</p>
-        {% endif %}
-    </div>
-
-    <diV class="card">
-        <h3>Your Projects ({{ projects.count }})</h3>
-        {% if projects %}
-            <ul>
-                {% for project in projects %}
-                    <li class="project-item">{{ project.title }} - {{ project.progress }}%</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No projects added yet.</p>
-        {% endif %}
-    </div>
 {% else %}
-    <diV class="card">
-        <p>Track your skills and projects to achieve your goals!</p>     
-        <p><a href="{% url 'main_app:login' %}">Login to get started</a></p>
-    </diV> 
+    <!-- non-authenticated users -->
+    <div class="landing">
+        <h1>Welcome to SkillHub</h1>
+        <p>Track your skills, manage projects, and reflect on your learning journey.</p>
+        <div class="auth-actions">
+            <a href="{% url 'main_app:signup' %}" class="btn-primary">Get Started</a>
+            <a href="{% url 'main_app:login' %}" class="btn-secondary">Login</a>
+        </div>
+    </div>
 {% endif %}
 {% endblock %}

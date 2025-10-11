@@ -11,7 +11,54 @@ def home(request):
       if request.user.is_authenticated:
           skills = Skill.objects.filter(user=request.user)
           projects = Project.objects.filter(user=request.user)
-          return render(request, 'main_app/home.html', {'skills': skills, 'projects': projects})
+           # calculate statistics
+          total_skills = skills.count()
+          total_projects = projects.count()
+
+          # calculate overall progress
+          if total_skills > 0:
+              avg_skill_progress = sum([skill.calculate_progress() for skill in skills]) / total_skills
+          else:
+              avg_skill_progress = 0
+
+          if total_projects > 0:
+              avg_project_progress = sum([project.calculate_progress() for project in projects]) / total_projects
+          else:
+              avg_project_progress = 0
+
+          # calculate task statistics
+          all_tasks = Task.objects.filter(skill__user=request.user) | Task.objects.filter(project__user=request.user)
+          total_tasks = all_tasks.count()
+          completed_tasks = all_tasks.filter(is_completed=True).count()
+          pending_tasks = total_tasks - completed_tasks
+
+          # calculate completion rate
+          if total_tasks > 0:
+              completion_rate = round((completed_tasks / total_tasks) * 100, 1)
+          else:
+              completion_rate = 0
+
+          # recent reflections
+          recent_reflections = Reflection.objects.filter(
+              skill__user=request.user
+          ).union( 
+              Reflection.objects.filter(project__user=request.user)
+          ).order_by('-date')[:3]
+
+          context = {
+              'skills': skills[:3],  # show only first 3 for preview
+              'projects': projects[:3],  # show only first 3 for preview
+              'total_skills': total_skills,
+              'total_projects': total_projects,
+              'avg_skill_progress': round(avg_skill_progress, 1),
+              'avg_project_progress': round(avg_project_progress, 1),
+              'total_tasks': total_tasks,
+              'completed_tasks': completed_tasks,
+              'pending_tasks': pending_tasks,
+              'completion_rate': completion_rate,
+              'recent_reflections': recent_reflections,
+          }
+          return render(request, 'main_app/home.html', context)
       else:
             return render(request, 'main_app/home.html')
 

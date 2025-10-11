@@ -18,6 +18,9 @@ def home(request):
 def skills_list(request):
       if request.user.is_authenticated:
             skills = Skill.objects.filter(user=request.user)
+            # to refresh the progress for all the skills 
+            for skill in skills:
+                  skill.save()
             return render(request, 'main_app/skills_list.html', {'skills': skills})
       else:
             return redirect('main_app:login')
@@ -25,6 +28,9 @@ def skills_list(request):
 def projects_list(request):
       if request.user.is_authenticated:
             projects = Project.objects.filter(user=request.user)
+            # to refresh the progress for all the projects 
+            for project in projects:
+                  project.save()
             return render(request, 'main_app/projects_list.html', {'projects': projects})
       else:
             return redirect('main_app:login')
@@ -139,21 +145,10 @@ def project_delete(request, project_id):
           return redirect('main_app:login')
       
 
-
-def skill_detail(request, skill_id):
-      if request.user.is_authenticated:
-          skill = Skill.objects.get(id=skill_id,
-  user=request.user)
-          tasks = Task.objects.filter(skill=skill)
-          return render(request, 'main_app/skill_detail.html',
-  {'skill': skill, 'tasks': tasks})
-      else:
-          return redirect('main_app:login')
-      
-
 def skill_detail(request, skill_id):
       if request.user.is_authenticated:
           skill = Skill.objects.get(id=skill_id, user=request.user)
+          skill.save()
           tasks = Task.objects.filter(skill=skill)
           return render(request, 'main_app/skill_detail.html', {'skill': skill, 'tasks': tasks})
       else:
@@ -163,6 +158,7 @@ def skill_detail(request, skill_id):
 def project_detail(request, project_id):
       if request.user.is_authenticated:
           project = Project.objects.get(id=project_id, user=request.user)
+          project.save()
           tasks = Task.objects.filter(project=project)
           return render(request, 'main_app/project_detail.html', {'project': project, 'tasks': tasks})
       else:
@@ -206,12 +202,12 @@ def task_create_for_project(request, project_id):
 def task_toggle(request, task_id):
       if request.user.is_authenticated:
           task = Task.objects.get(id=task_id)
-          # Make sure task belongs to user's skill or project
+          # make sure task belongs to user's skill or project
           if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
               task.is_completed = not task.is_completed
               task.save()
 
-              # Redirect back to the appropriate detail page
+              # redirect back to the appropriate detail page
               if task.skill:
                   return redirect('main_app:skill_detail', skill_id=task.skill.id)
               elif task.project:

@@ -11,6 +11,18 @@ class Skill(models.Model):
 
       def __str__(self):
           return self.title
+      
+      def calculate_progress(self):
+        tasks = self.task_set.all()
+        if tasks.count() == 0:
+            return 0.0
+        completed_tasks = tasks.filter(is_completed=True).count()
+        return round((completed_tasks / tasks.count()) * 100, 1)
+
+      def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.progress = self.calculate_progress()
+        super().save(update_fields=['progress'])
     
 
 class Project(models.Model):
@@ -22,6 +34,19 @@ class Project(models.Model):
       def __str__(self):
           return self.title
       
+      def calculate_progress(self):
+        tasks = self.task_set.all()
+        if tasks.count() == 0:
+            return 0.0
+        completed_tasks = tasks.filter(is_completed=True).count()
+        return round((completed_tasks / tasks.count()) * 100, 1)
+      
+      def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.progress = self.calculate_progress()
+        super().save(update_fields=['progress'])
+
+
 class Task(models.Model):
       title = models.CharField(max_length=255)
       description = models.TextField(blank=True, null=True)
@@ -32,6 +57,14 @@ class Task(models.Model):
       def __str__(self):
           return self.title
       
+      def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # update progress for parent skill or project
+        if self.skill:
+            self.skill.save()
+        elif self.project:
+            self.project.save()
+        
 
 class Reflection(models.Model):
       content = models.TextField()
@@ -41,3 +74,5 @@ class Reflection(models.Model):
 
       def __str__(self):
           return f"Reflection on {self.date}"
+      
+

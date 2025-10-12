@@ -342,3 +342,47 @@ def reflection_delete(request, reflection_id):
           return redirect('main_app:home')
       else:
           return redirect('main_app:login')
+      
+
+def task_edit(request, task_id):
+      if request.user.is_authenticated:
+          task = Task.objects.get(id=task_id)
+          # Check if user owns this task through skill or project
+          if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
+              if request.method == 'POST':
+                  form = TaskForm(request.POST, instance=task)
+                  if form.is_valid():
+                      form.save()
+                      if task.skill:
+                          return redirect('main_app:skill_detail', skill_id=task.skill.id)
+                      elif task.project:
+                          return redirect('main_app:project_detail', project_id=task.project.id)
+              else:
+                  form = TaskForm(instance=task)
+              return render(request, 'main_app/task_form.html', {'form': form, 'task': task, 'action': 'Edit'})
+
+          return redirect('main_app:home')
+      else:
+          return redirect('main_app:login')
+
+
+def task_delete(request, task_id):
+      if request.user.is_authenticated:
+          task = Task.objects.get(id=task_id)
+          # Check if user owns this task
+          if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
+              if request.method == 'POST':
+                  skill_id = task.skill.id if task.skill else None
+                  project_id = task.project.id if task.project else None
+                  task.delete()
+
+                  if skill_id:
+                      return redirect('main_app:skill_detail', skill_id=skill_id)
+                  elif project_id:
+                      return redirect('main_app:project_detail', project_id=project_id)
+
+              return render(request, 'main_app/task_confirm_delete.html', {'task': task})
+
+          return redirect('main_app:home')
+      else:
+          return redirect('main_app:login')

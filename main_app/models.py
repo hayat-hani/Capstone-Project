@@ -20,10 +20,10 @@ class Skill(models.Model):
         return round((completed_tasks / tasks.count()) * 100, 1)
 
       def save(self, *args, **kwargs):
-        if 'update_progress' not in kwargs:
+        update_progress = kwargs.pop('update_progress', False)
+        if not update_progress:
           super().save(*args, **kwargs)
           self.progress = self.calculate_progress()
-          kwargs['update_progress'] = True
           super().save(update_fields=['progress'])
         else:
           super().save(*args, **kwargs)
@@ -46,10 +46,10 @@ class Project(models.Model):
         return round((completed_tasks / tasks.count()) * 100, 1)
       
       def save(self, *args, **kwargs):
-        if 'update_progress' not in kwargs:
+        update_progress = kwargs.pop('update_progress', False)
+        if not update_progress:
           super().save(*args, **kwargs)
           self.progress = self.calculate_progress()
-          kwargs['update_progress'] = True
           super().save(update_fields=['progress'])
         else:
           super().save(*args, **kwargs)

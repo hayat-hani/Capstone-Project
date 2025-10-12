@@ -4,8 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SkillForm, ProjectForm, TaskForm, ReflectionForm
-
 from .models import Skill, Project, Task, Reflection
+from django.contrib.auth.decorators import login_required
+from django.db import models
+from django.shortcuts import render, redirect, get_object_or_404
 
 def home(request):
       if request.user.is_authenticated:
@@ -128,7 +130,7 @@ def skill_create(request):
 
 def skill_edit(request, skill_id):
       if request.user.is_authenticated:
-          skill = Skill.objects.get(id=skill_id, user=request.user)
+          skill = get_object_or_404(Skill, id=skill_id, user=request.user)
           if request.method == 'POST':
               form = SkillForm(request.POST, instance=skill)
               if form.is_valid():
@@ -143,7 +145,7 @@ def skill_edit(request, skill_id):
 
 def skill_delete(request, skill_id):
       if request.user.is_authenticated:
-          skill = Skill.objects.get(id=skill_id, user=request.user)
+          skill = get_object_or_404(Skill, id=skill_id, user=request.user)
           if request.method == 'POST':
               skill.delete()
               return redirect('main_app:skills_list')
@@ -169,7 +171,7 @@ def project_create(request):
 
 def project_edit(request, project_id):
       if request.user.is_authenticated:
-          project = Project.objects.get(id=project_id, user=request.user)
+          project = get_object_or_404(Project, id=project_id, user=request.user)
           if request.method == 'POST':
               form = ProjectForm(request.POST, instance=project)
               if form.is_valid():
@@ -183,7 +185,7 @@ def project_edit(request, project_id):
 
 def project_delete(request, project_id):
       if request.user.is_authenticated:
-          project = Project.objects.get(id=project_id, user=request.user)
+          project = get_object_or_404(Project, id=project_id, user=request.user)
           if request.method == 'POST':
               project.delete()
               return redirect('main_app:projects_list')
@@ -194,7 +196,7 @@ def project_delete(request, project_id):
 
 def skill_detail(request, skill_id):
       if request.user.is_authenticated:
-          skill = Skill.objects.get(id=skill_id, user=request.user)
+          skill = get_object_or_404(Skill, id=skill_id, user=request.user)
           skill.save()
           tasks = Task.objects.filter(skill=skill)
           reflections = Reflection.objects.filter(skill=skill).order_by('-date')
@@ -205,7 +207,7 @@ def skill_detail(request, skill_id):
 
 def project_detail(request, project_id):
       if request.user.is_authenticated:
-          project = Project.objects.get(id=project_id, user=request.user)
+          project = get_object_or_404(Project, id=project_id, user=request.user)
           project.save()
           tasks = Task.objects.filter(project=project)
           reflections = Reflection.objects.filter(project=project).order_by('-date')
@@ -216,7 +218,7 @@ def project_detail(request, project_id):
 
 def task_create_for_skill(request, skill_id):
       if request.user.is_authenticated:
-          skill = Skill.objects.get(id=skill_id, user=request.user)
+          skill = get_object_or_404(Skill, id=skill_id, user=request.user)
           if request.method == 'POST':
               form = TaskForm(request.POST)
               if form.is_valid():
@@ -233,7 +235,7 @@ def task_create_for_skill(request, skill_id):
 
 def task_create_for_project(request, project_id):
       if request.user.is_authenticated:
-          project = Project.objects.get(id=project_id, user=request.user)
+          project = get_object_or_404(Project, id=project_id, user=request.user)
           if request.method == 'POST':
               form = TaskForm(request.POST)
               if form.is_valid():
@@ -250,7 +252,7 @@ def task_create_for_project(request, project_id):
 
 def task_toggle(request, task_id):
       if request.user.is_authenticated:
-          task = Task.objects.get(id=task_id)
+          task = get_object_or_404(Task, id=task_id)
           # make sure task belongs to user's skill or project
           if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
               task.is_completed = not task.is_completed
@@ -269,7 +271,7 @@ def task_toggle(request, task_id):
 
 def reflection_create_for_skill(request, skill_id):
       if request.user.is_authenticated:
-          skill = Skill.objects.get(id=skill_id, user=request.user)
+          skill = get_object_or_404(Skill, id=skill_id, user=request.user)
           if request.method == 'POST':
               form = ReflectionForm(request.POST)
               if form.is_valid():
@@ -286,7 +288,7 @@ def reflection_create_for_skill(request, skill_id):
 
 def reflection_create_for_project(request, project_id):
       if request.user.is_authenticated:
-          project = Project.objects.get(id=project_id, user=request.user)
+          project = get_object_or_404(Project, id=project_id, user=request.user)
           if request.method == 'POST':
               form = ReflectionForm(request.POST)
               if form.is_valid():
@@ -303,7 +305,7 @@ def reflection_create_for_project(request, project_id):
 
 def reflection_edit(request, reflection_id):
     if request.user.is_authenticated:
-        reflection = Reflection.objects.get(id=reflection_id)
+        reflection = get_object_or_404(Reflection, id=reflection_id)
         # check if user owns this reflection through skill or project
         if (reflection.skill and reflection.skill.user == request.user) or (reflection.project and reflection.project.user == request.user):
             if request.method == 'POST':
@@ -324,7 +326,7 @@ def reflection_edit(request, reflection_id):
 
 def reflection_delete(request, reflection_id):
       if request.user.is_authenticated:
-          reflection = Reflection.objects.get(id=reflection_id)
+          reflection = get_object_or_404(Reflection, id=reflection_id)
           # check if user owns this reflection
           if (reflection.skill and reflection.skill.user == request.user) or (reflection.project and reflection.project.user == request.user):
               if request.method == 'POST':
@@ -346,7 +348,7 @@ def reflection_delete(request, reflection_id):
 
 def task_edit(request, task_id):
       if request.user.is_authenticated:
-          task = Task.objects.get(id=task_id)
+          task = get_object_or_404(Task, id=task_id)
           # Check if user owns this task through skill or project
           if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
               if request.method == 'POST':
@@ -368,7 +370,7 @@ def task_edit(request, task_id):
 
 def task_delete(request, task_id):
       if request.user.is_authenticated:
-          task = Task.objects.get(id=task_id)
+          task = get_object_or_404(Task, id=task_id)
           # Check if user owns this task
           if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
               if request.method == 'POST':
@@ -386,3 +388,37 @@ def task_delete(request, task_id):
           return redirect('main_app:home')
       else:
           return redirect('main_app:login')
+      
+
+@login_required
+def profile_view(request):
+    user = request.user
+
+    # Get user statistics
+    total_skills = user.skill_set.count()
+    total_projects = user.project_set.count()
+    total_tasks = Task.objects.filter(
+        models.Q(skill__user=user) | models.Q(project__user=user)).count() 
+    completed_tasks = Task.objects.filter(
+        models.Q(skill__user=user) | models.Q(project__user=user), is_completed=True ).count()
+
+    context = {
+        'user': user,
+        'total_skills': total_skills,
+        'total_projects': total_projects,
+        'total_tasks': total_tasks,
+        'completed_tasks': completed_tasks,
+    }
+    return render(request, 'main_app/profile.html', context)
+
+@login_required
+def profile_edit(request):
+    if request.method == 'POST':
+        user = request.user
+        user.username = request.POST['username']
+        user.email = request.POST['email']
+        user.save()
+        return redirect('main_app:profile')
+
+    return render(request, 'main_app/profile_edit.html',
+{'user': request.user})

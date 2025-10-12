@@ -1,0 +1,37 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<div class="detail-container">
+    <h2>User Profile</h2>
+
+    <div class="profile-info">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Member since:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ total_skills }}</h3>
+            <p>Total Skills</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_projects }}</h3>
+            <p>Total Projects</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_tasks }}</h3>
+            <p>Total Tasks</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ completed_tasks }}</h3>
+            <p>Completed Tasks</p>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+        <a href="{% url 'main_app:profile_edit' %}" class="btn-primary">Edit Profile</a>
+        <a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

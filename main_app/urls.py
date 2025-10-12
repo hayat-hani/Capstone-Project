@@ -26,4 +26,6 @@ urlpatterns = [
     path('reflections/<int:reflection_id>/delete/', views.reflection_delete, name='reflection_delete'),
     path('tasks/<int:task_id>/edit/', views.task_edit, name='task_edit'),
     path('tasks/<int:task_id>/delete/', views.task_delete, name='task_delete'),
+    path('profile/', views.profile_view, name='profile'),
+    path('profile/edit/', views.profile_edit, name='profile_edit'),
 ]

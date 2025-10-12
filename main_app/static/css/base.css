@@ -631,3 +631,57 @@ body {
       }
   }
   
+
+  /* empty states styling */
+  .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef
+  100%);
+      border-radius: 12px;
+      margin: 40px 0;
+  }
+
+  .empty-state-content h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+  }
+
+  .empty-state-content p {
+      color: #6c757d;
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+  }
+
+  .example-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+      text-align: left;
+      display: inline-block;
+  }
+
+  .example-list li {
+      padding: 8px 0;
+      color: #495057;
+      position: relative;
+      padding-left: 25px;
+  }
+
+  .example-list li:before {
+      content: "•";
+      color: #007bff;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+  }
+
+  .btn-large {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      font-weight: 600;
+  }

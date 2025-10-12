@@ -31,12 +31,24 @@
       {% endfor %}
       </div>
   {% else %}
-    <div class="empty-state">
-      <p>No projects added yet.</p>
-      <a href="{% url 'main_app:project_create' %}" class="btn-primary"> Add your first project!</a>
+  <div class="empty-state">
+    <div class="empty-state-content">
+      <h3>🎯 Start Your First Project!</h3>
+      <p>Projects are larger goals or initiatives you want to accomplish. Examples include:</p>
+      <ul class="example-list">
+        <li>Building a website or mobile app</li>
+        <li>Learning a new programming framework</li>
+        <li>Writing a book or blog</li>
+        <li>Starting a business or side hustle</li>
+        <li>Completing a certification course</li>
+      </ul>
+      <p>Create your first project and break it down into manageable tasks!</p>
+      <a href="{% url 'main_app:project_create' %}" class="btn-primary btn-large">🚀 Create Your First Project</a>
     </div>
-  {% endif %}
+  </div>
+{% endif %}
 
-</div>
 <a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Dashboard</a>
+</div>
+
 {% endblock %}

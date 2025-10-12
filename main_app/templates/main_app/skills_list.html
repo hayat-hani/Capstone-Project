@@ -4,9 +4,9 @@
 <div class="list-container">
     <div class="list-header">
       <h2>My Skills</h2>
-      <a href="{% url 'main_app:skill_create' %}" class="btn-primary">Add New Skill</a>
     </div>
 {% if skills %}
+  <a href="{% url 'main_app:skill_create' %}" class="btn-primary">Add New Skill</a>
   <div class="skills-grid">
     {% for skill in skills %}
       <div class="skill-card">
@@ -32,11 +32,21 @@
   </div>
 {% else %}
   <div class="empty-state">
-    <p>No skills added yet.</p>
-    <a href="{% url 'main_app:skill_create' %}" class="btn-primary"> Add your first skill! </a>
+      <div class="empty-state-content">
+          <h3>🚀 Start Building Your Skill Portfolio!</h3>
+          <p>Skills are abilities you want to develop or track progress on. Here are some examples:</p>
+          <ul class="example-list">
+              <li>Programming languages (Python, JavaScript, Java)</li>
+              <li>Design skills (Photoshop, UI/UX Design)</li>
+              <li>Languages (Spanish, French, Arabic)</li>
+              <li>Professional skills (Public Speaking, Project Management)</li>
+          </ul>
+          <p>Add your first skill to start tracking your learning journey!</p>
+          <a href="{% url 'main_app:skill_create' %}" class="btn-primary btn-large">🚀 Add your first skill! </a>
+        </div>
   </div>
 {% endif %}
 
-<a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Dahsboard</a>
+<a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Dashboard</a>
 </div>
 {% endblock %}

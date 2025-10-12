@@ -62,9 +62,9 @@
                     <p>"{{ reflection.content|truncatewords:15 }}"</p>
                     <small>
                         {% if reflection.skill %}
-                            on {{ reflection.skill.title }} - {{ reflection.date|date:"M d" }}
+                            on {{ reflection.skill.title }} - {{ reflection.date|date:"M j" }}
                         {% elif reflection.project %}
-                            on {{ reflection.project.title }} - {{ reflection.date|date:"M d" }}
+                            on {{ reflection.project.title }} - {{ reflection.date|date:"M j" }}
                         {% endif %}
                     </small>
                 </div>

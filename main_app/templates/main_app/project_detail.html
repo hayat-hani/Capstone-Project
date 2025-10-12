@@ -53,7 +53,7 @@
                     <p>{{ reflection.content }}</p>
                 </div>
                 <div class="reflection-date">
-                    <small>{{ reflection.date|date:"M d, Y at H:i" }}</small>
+                    <small>{{ reflection.date|date:"F j, Y \a\t g:i A" }}</small>
                     <div class="reflection-actions">
                         <a href="{% url 'main_app:reflection_edit' reflection.id %}" class="btn-edit">Edit</a>
                         <a href="{% url 'main_app:reflection_delete' reflection.id %}" class="btn-delete">Delete</a>

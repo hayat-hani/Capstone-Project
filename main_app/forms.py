@@ -32,7 +32,7 @@ class ReflectionForm(forms.ModelForm):
           widgets = {
               'content': forms.Textarea(attrs={
                   'rows': 5,
-                  'placeholder': 'Share your thoughts, lessonslearned, or progress notes...'
+                  'placeholder': 'Share your thoughts, lessons learned, or progress notes...'
               }),
           }
           labels = {

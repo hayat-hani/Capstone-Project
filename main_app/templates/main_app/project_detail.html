@@ -16,6 +16,8 @@
     </div>
 
     <h3>Tasks</h3>
+    <a href="{% url 'main_app:task_create_for_project' project.id %}" class="btn-primary">Add Task</a>
+
     {% if tasks %}
         <ul class="task-list">
         {% for task in tasks %}
@@ -38,7 +40,6 @@
         <p>No tasks added yet.</p>
     {% endif %}
 
-    <a href="{% url 'main_app:task_create_for_project' project.id %}" class="btn-primary">Add Task</a>
 
 
     <h3>Reflections</h3>

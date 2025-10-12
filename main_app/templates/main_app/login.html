@@ -1,22 +1,25 @@
 {% extends 'main_app/base.html' %}
 
 {% block content %}
-<h2>Login</h2>
+<div class="auth-container">
+    <h2>Login</h2>
 
-<form method="post">
-    {% csrf_token %}
-    <div>
-        <label>Username:</label>
-        <input type="text" name="username" required>
-    </div>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label>Username:</label>
+            <input type="text" name="username" required>
+        </p>
 
-    <div>
-        <label>Password:</label>
-        <input type="password" name="password" required>
-    </div>
+        <p>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+        </p>
 
-    <button type="submit">Login</button>
-</form>
-
-<p><a href="/">Back to Home</a></p>
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+    
+    <p>Don't have an account? <a href="{% url 'main_app:signup' %}">Sign up here</a></p>
+    <p><a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Home</a></p>
+</div>
 {% endblock %}

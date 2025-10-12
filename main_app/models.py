@@ -20,9 +20,13 @@ class Skill(models.Model):
         return round((completed_tasks / tasks.count()) * 100, 1)
 
       def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.progress = self.calculate_progress()
-        super().save(update_fields=['progress'])
+        if 'update_progress' not in kwargs:
+          super().save(*args, **kwargs)
+          self.progress = self.calculate_progress()
+          kwargs['update_progress'] = True
+          super().save(update_fields=['progress'])
+        else:
+          super().save(*args, **kwargs)
     
 
 class Project(models.Model):
@@ -42,9 +46,13 @@ class Project(models.Model):
         return round((completed_tasks / tasks.count()) * 100, 1)
       
       def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.progress = self.calculate_progress()
-        super().save(update_fields=['progress'])
+        if 'update_progress' not in kwargs:
+          super().save(*args, **kwargs)
+          self.progress = self.calculate_progress()
+          kwargs['update_progress'] = True
+          super().save(update_fields=['progress'])
+        else:
+          super().save(*args, **kwargs)
 
 
 class Task(models.Model):
@@ -61,9 +69,9 @@ class Task(models.Model):
         super().save(*args, **kwargs)
         # update progress for parent skill or project
         if self.skill:
-            self.skill.save()
+            self.skill.save(update_progress=True)
         elif self.project:
-            self.project.save()
+            self.project.save(update_progress=True)
         
 
 class Reflection(models.Model):

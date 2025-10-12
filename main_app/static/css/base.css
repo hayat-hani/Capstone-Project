@@ -685,3 +685,47 @@ body {
       font-size: 1.2em;
       font-weight: 600;
   }
+
+  /* messages styling */
+  .messages-container {
+      margin: 20px auto;
+      max-width: 1200px;
+      padding: 0 20px;
+  }
+
+  .alert {
+      padding: 15px 20px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      position: relative;
+      animation: slideIn 0.3s ease;
+  }
+
+  .alert-success {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+  }
+
+  .alert-error {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+  }
+
+  .close-btn {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: inherit;
+  }
+
+  @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+  }

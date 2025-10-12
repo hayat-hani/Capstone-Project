@@ -8,6 +8,7 @@ from .models import Skill, Project, Task, Reflection
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 def home(request):
       if request.user.is_authenticated:
@@ -120,6 +121,7 @@ def skill_create(request):
                   skill = form.save(commit=False)
                   skill.user = request.user
                   skill.save()
+                  messages.success(request, f'Skill "{skill.title}" created successfully!')
                   return redirect('main_app:skills_list')
           else:
               form = SkillForm()
@@ -135,6 +137,7 @@ def skill_edit(request, skill_id):
               form = SkillForm(request.POST, instance=skill)
               if form.is_valid():
                   form.save()
+                  messages.success(request, f'Skill "{skill.title}" updated successfully!')
                   return redirect('main_app:skills_list')
           else:
               form = SkillForm(instance=skill)
@@ -147,7 +150,9 @@ def skill_delete(request, skill_id):
       if request.user.is_authenticated:
           skill = get_object_or_404(Skill, id=skill_id, user=request.user)
           if request.method == 'POST':
+              skill_title = skill.title
               skill.delete()
+              messages.success(request, f'Skill "{skill_title}" deleted successfully!')
               return redirect('main_app:skills_list')
           return render(request, 'main_app/skill_confirm_delete.html', {'skill': skill})
       else:
@@ -162,6 +167,7 @@ def project_create(request):
                   project = form.save(commit=False)
                   project.user = request.user
                   project.save()
+                  messages.success(request, f'Project "{project.title}" created successfully!')
                   return redirect('main_app:projects_list')
           else:
               form = ProjectForm()
@@ -176,6 +182,7 @@ def project_edit(request, project_id):
               form = ProjectForm(request.POST, instance=project)
               if form.is_valid():
                   form.save()
+                  messages.success(request, f'Project "{project.title}" updated successfully!')
                   return redirect('main_app:projects_list')
           else:
               form = ProjectForm(instance=project)
@@ -187,7 +194,9 @@ def project_delete(request, project_id):
       if request.user.is_authenticated:
           project = get_object_or_404(Project, id=project_id, user=request.user)
           if request.method == 'POST':
+              project_title = project.title
               project.delete()
+              messages.success(request, f'Project "{project_title}" deleted successfully!')
               return redirect('main_app:projects_list')
           return render(request, 'main_app/project_confirm_delete.html', {'project': project})
       else:
@@ -257,6 +266,8 @@ def task_toggle(request, task_id):
           if (task.skill and task.skill.user == request.user) or (task.project and task.project.user == request.user):
               task.is_completed = not task.is_completed
               task.save()
+              status = "completed" if task.is_completed else "marked as incomplete" 
+              messages.success(request, f'Task "{task.title}" {status}!')
 
               # redirect back to the appropriate detail page
               if task.skill:
@@ -312,6 +323,7 @@ def reflection_edit(request, reflection_id):
                 form = ReflectionForm(request.POST, instance=reflection)
                 if form.is_valid():
                     form.save()
+                    messages.success(request, 'Reflection updated successfully!')
                     if reflection.skill:
                         return redirect('main_app:skill_detail', skill_id=reflection.skill.id)
                     elif reflection.project:
@@ -333,6 +345,7 @@ def reflection_delete(request, reflection_id):
                   skill_id = reflection.skill.id if reflection.skill else None
                   project_id = reflection.project.id if reflection.project else None
                   reflection.delete()
+                  messages.success(request, 'Reflection deleted successfully!')
 
                   if skill_id:
                       return redirect('main_app:skill_detail', skill_id=skill_id)
@@ -355,6 +368,7 @@ def task_edit(request, task_id):
                   form = TaskForm(request.POST, instance=task)
                   if form.is_valid():
                       form.save()
+                      messages.success(request, f'Task "{task.title}" updated successfully!')
                       if task.skill:
                           return redirect('main_app:skill_detail', skill_id=task.skill.id)
                       elif task.project:
@@ -376,7 +390,9 @@ def task_delete(request, task_id):
               if request.method == 'POST':
                   skill_id = task.skill.id if task.skill else None
                   project_id = task.project.id if task.project else None
+                  task_title = task.title
                   task.delete()
+                  messages.success(request, f'Task "{task_title}" deleted successfully!')
 
                   if skill_id:
                       return redirect('main_app:skill_detail', skill_id=skill_id)

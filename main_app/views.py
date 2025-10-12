@@ -139,7 +139,7 @@ def skill_edit(request, skill_id):
           else:
               form = SkillForm(instance=skill)
           return render(request, 'main_app/skill_form.html',
-  {'form': form, 'action': 'Edit'})
+  {'form': form, 'action': 'Edit', 'skill': skill})
       else:
           return redirect('main_app:login')
 
@@ -179,7 +179,7 @@ def project_edit(request, project_id):
                   return redirect('main_app:projects_list')
           else:
               form = ProjectForm(instance=project)
-          return render(request, 'main_app/project_form.html', {'form': form, 'action': 'Edit'})
+          return render(request, 'main_app/project_form.html', {'form': form, 'action': 'Edit', 'project': project})
       else:
           return redirect('main_app:login')
 

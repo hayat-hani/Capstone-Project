@@ -6,8 +6,12 @@
       <form method="post">
           {% csrf_token %}
           {{ form.as_p }}
-          <button type="submit">{{ action }} Proejct </button>
-          <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Cancel</a>
+          <button type="submit" class="btn-primary">{{ action }} Project</button>
+          {% if project %}
+            <a href="{% url 'main_app:project_detail' project.id %}" class="btn-secondary">Cancel</a>
+          {% else %}
+            <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Cancel</a>
+          {% endif %}
       </form>
   </div>
   {% endblock %}

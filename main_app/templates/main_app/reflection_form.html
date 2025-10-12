@@ -13,7 +13,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">{{ action }} Reflection</button>
+        <button type="submit" class="btn-primary">{{ action }} Reflection</button>
 
         {% if skill %}
             <a href="{% url 'main_app:skill_detail' skill.id %}" class="btn-secondary">Cancel</a>

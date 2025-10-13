@@ -68,19 +68,56 @@ def home(request):
 def skills_list(request):
       if request.user.is_authenticated:
             skills = Skill.objects.filter(user=request.user)
+            # get search parameters
+            search_query = request.GET.get('search', '')
+            category_filter = request.GET.get('category', '')
+
+            # apply search filter
+            if search_query:
+                skills = skills.filter(
+                    models.Q(title__icontains=search_query) |
+                    models.Q(description__icontains=search_query)
+                )
+
+            # apply category filter
+            if category_filter:
+                skills = skills.filter(category=category_filter)
+
+            # Get unique categories for filter dropdown
+            categories = Skill.objects.filter(user=request.user).exclude(category__isnull=True).exclude(category='').values_list('category', flat=True).distinct()
+                
             # to refresh the progress for all the skills 
             for skill in skills:
                   skill.save()
-            return render(request, 'main_app/skills_list.html', {'skills': skills})
+            context = {
+              'skills': skills,
+              'categories': categories,
+              'search_query': search_query,
+              'category_filter': category_filter,
+            }
+            return render(request, 'main_app/skills_list.html', context)
       else:
             return redirect('main_app:login')
 
 def projects_list(request):
       if request.user.is_authenticated:
             projects = Project.objects.filter(user=request.user)
+            # Get search parameters
+            search_query = request.GET.get('search', '')
+
+            # Apply search filter
+            if search_query:
+                projects = projects.filter(
+                    models.Q(title__icontains=search_query) |
+                    models.Q(description__icontains=search_query)
+                )
             # to refresh the progress for all the projects 
             for project in projects:
                   project.save()
+            context = {
+              'projects': projects,
+              'search_query': search_query,
+            }
             return render(request, 'main_app/projects_list.html', {'projects': projects})
       else:
             return redirect('main_app:login')

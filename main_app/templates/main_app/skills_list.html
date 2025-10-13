@@ -5,6 +5,24 @@
     <div class="list-header">
       <h2>My Skills</h2>
     </div>
+    <!-- Search and Filter Section -->
+    <div class="search-section">
+        <form method="get" class="search-form">
+            <div class="search-inputs">
+                <input type="text" name="search" placeholder="Search skills by name or description..." value="{{ request.GET.search }}" class="search-input">
+                <select name="category" class="filter-select">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if request.GET.category == category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-primary">Search</button>
+                {% if request.GET.search or request.GET.category %}
+                    <a href="{% url 'main_app:skills_list' %}" class="btn-secondary">Clear</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
 {% if skills %}
   <a href="{% url 'main_app:skill_create' %}" class="btn-primary">Add New Skill</a>
   <div class="skills-grid">

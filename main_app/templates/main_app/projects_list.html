@@ -6,6 +6,18 @@
   <div class="list-header">
     <h2>My Projects</h2>
   </div>
+  <!-- Search Section -->
+  <div class="search-section">
+      <form method="get" class="search-form">
+          <div class="search-inputs">
+              <input type="text" name="search" placeholder="Search projects by name or description..." value="{{ request.GET.search }}" class="search-input">
+              <button type="submit" class="btn-primary">Search</button>
+              {% if request.GET.search %}
+                  <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Clear</a>
+              {% endif %}
+          </div>
+      </form>
+  </div>
   
   {% if projects %}
     <a href="{% url 'main_app:project_create' %}" class="btn-primary">Add New Project</a>

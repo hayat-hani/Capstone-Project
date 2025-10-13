@@ -1,0 +1,31 @@
+{% extends 'main_app/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Delete Account</h2>
+    
+    <div style="background-color: #ffebee; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; border-left: 4px solid #f44336;">
+        <h3 style="color: #c62828; margin: 0 0 0.5rem 0;">⚠️ Warning</h3>
+        <p style="color: #c62828; margin: 0;">This action cannot be undone. Deleting your account will permanently remove:</p>
+        <ul style="color: #c62828; margin: 0.5rem 0 0 1rem;">
+            <li>All your skills and projects</li>
+            <li>All your tasks and reflections</li>
+            <li>Your profile information</li>
+            <li>All associated data</li>
+        </ul>
+    </div>
+
+    <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete" style="background-color: #f44336; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+            Yes, Delete My Account
+        </button>
+    </form>
+
+    <div class="profile-actions" style="margin-top: 1rem;">
+        <a href="{% url 'main_app:profile' %}" class="btn-secondary">Cancel</a>
+    </div>
+</div>
+{% endblock %}

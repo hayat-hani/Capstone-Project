@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from .forms import SkillForm, ProjectForm, TaskForm, ReflectionForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from .forms import SkillForm, ProjectForm, TaskForm, ReflectionForm, ProfileForm, CustomUserCreationForm
 from .models import Skill, Project, Task, Reflection
 from django.contrib.auth.decorators import login_required
 from django.db import models
@@ -155,13 +155,13 @@ def user_logout(request):
 
 def user_signup(request):
       if request.method == 'POST':
-          form = UserCreationForm(request.POST)
+          form = CustomUserCreationForm(request.POST)
           if form.is_valid():
               user = form.save()
               login(request, user)
               return redirect('main_app:home')
       else:
-          form = UserCreationForm()
+          form = CustomUserCreationForm()
       return render(request, 'main_app/signup.html', {'form': form})
 
 
@@ -482,11 +482,38 @@ def profile_view(request):
 @login_required
 def profile_edit(request):
     if request.method == 'POST':
-        user = request.user
-        user.username = request.POST['username']
-        user.email = request.POST['email']
-        user.save()
-        return redirect('main_app:profile')
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('main_app:profile')
+    else:
+        form = ProfileForm(instance=request.user)
+    
+    return render(request, 'main_app/profile_edit.html', {'form': form})
 
-    return render(request, 'main_app/profile_edit.html',
-{'user': request.user})
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            from django.contrib.auth import update_session_auth_hash
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Password changed successfully!')
+            return redirect('main_app:profile')
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'main_app/change_password.html', {'form': form})
+
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        logout(request)
+        user.delete()
+        messages.success(request, 'Your account has been deleted successfully.')
+        return redirect('main_app:home')
+    return render(request, 'main_app/delete_account.html')

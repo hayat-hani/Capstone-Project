@@ -3,7 +3,11 @@
 {% block content %}
 {% if user.is_authenticated %}
     <div class="dashboard">
-        <h1>Welcome back, {{ user.username }}! </h1>
+        {% if user.first_name or user.last_name %}
+            <h1>Welcome back, {{ user.first_name }} {{ user.last_name }}! </h1>
+        {% else %}
+            <h1>Welcome back, {{ user.username }}! </h1>
+        {% endif %}
 
         <!-- statistics overview -->
         <div class="stats-section">

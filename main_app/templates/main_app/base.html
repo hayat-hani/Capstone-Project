@@ -15,8 +15,44 @@
                 {%if user.is_authenticated %}
                     <li><a href="{% url 'main_app:skills_list' %}">Skills</a></li>    
                     <li><a href="{% url 'main_app:projects_list' %}">Projects</a></li>
-                      <li><a href="{% url 'main_app:profile' %}">Profile</a></li>
-                    <li><a href="{% url 'main_app:logout' %}">Logout</a></li>
+                    <li class="profile-dropdown">
+                        <div class="profile-trigger">
+                            <div class="profile-avatar">
+                                {% if user.first_name %}
+                                    {{ user.first_name.0 }}{{ user.last_name.0 }}
+                                {% else %}
+                                    {{ user.username.0 }}
+                                {% endif %}
+                            </div>
+                            <span class="profile-name">
+                                {% if user.first_name %}
+                                    {{ user.first_name }}
+                                {% else %}
+                                    {{ user.username }}
+                                {% endif %}
+                            </span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="{% url 'main_app:profile' %}" class="dropdown-item">
+                                <span class="dropdown-icon">👤</span> View Profile
+                            </a>
+                            <a href="{% url 'main_app:profile_edit' %}" class="dropdown-item">
+                                <span class="dropdown-icon">✏️</span> Edit Profile
+                            </a>
+                            <a href="{% url 'main_app:change_password' %}" class="dropdown-item">
+                                <span class="dropdown-icon">🔒</span> Change Password
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{% url 'main_app:delete_account' %}" class="dropdown-item danger">
+                                <span class="dropdown-icon">🗑️</span> Delete Account
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{% url 'main_app:logout' %}" class="dropdown-item">
+                                <span class="dropdown-icon">🚪</span> Logout
+                            </a>
+                        </div>
+                    </li>
                 {% else %}
                     <li><a href="{% url 'main_app:login' %}">Login</a></li>
                     <li><a href="{% url 'main_app:signup' %}">Sign Up</a></li>

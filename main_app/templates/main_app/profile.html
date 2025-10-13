@@ -7,6 +7,9 @@
     <div class="profile-info">
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
+        {% if user.first_name or user.last_name %}
+          <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        {% endif %}
         <p><strong>Member since:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
     </div>
 
@@ -30,7 +33,6 @@
     </div> {% endcomment %}
 
     <div class="profile-actions">
-        <a href="{% url 'main_app:profile_edit' %}" class="btn-primary">Edit Profile</a>
         <a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Dashboard</a>
     </div>
 </div>

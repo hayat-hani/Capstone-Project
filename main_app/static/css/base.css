@@ -341,8 +341,9 @@ body {
 
   .task-actions {
       display: flex;
+      flex-direction: column;
       gap: 5px;
-      flex-wrap: wrap;
+      align-items: flex-start;
   }
 
    /* navigation styling */
@@ -770,4 +771,13 @@ body {
           width: 100%;
           margin-bottom: 10px;
       }
+  }
+
+  .task-toggle-action {
+      margin-bottom: 8px;
+  }
+
+  .task-edit-actions {
+      display: flex;
+      gap: 5px;
   }

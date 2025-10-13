@@ -83,7 +83,7 @@ def skills_list(request):
             if category_filter:
                 skills = skills.filter(category=category_filter)
 
-            # Get unique categories for filter dropdown
+            # get unique categories for filter dropdown
             categories = Skill.objects.filter(user=request.user).exclude(category__isnull=True).exclude(category='').values_list('category', flat=True).distinct()
                 
             # to refresh the progress for all the skills 
@@ -102,10 +102,10 @@ def skills_list(request):
 def projects_list(request):
       if request.user.is_authenticated:
             projects = Project.objects.filter(user=request.user)
-            # Get search parameters
+            # get search parameters
             search_query = request.GET.get('search', '')
 
-            # Apply search filter
+            # apply search filter
             if search_query:
                 projects = projects.filter(
                     models.Q(title__icontains=search_query) |
@@ -447,7 +447,7 @@ def task_delete(request, task_id):
 def profile_view(request):
     user = request.user
 
-    # Get user statistics
+    # get user statistics
     total_skills = user.skill_set.count()
     total_projects = user.project_set.count()
     total_tasks = Task.objects.filter(

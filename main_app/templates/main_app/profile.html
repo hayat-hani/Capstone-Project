@@ -10,7 +10,7 @@
         <p><strong>Member since:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
     </div>
 
-    <div class="stats-grid">
+    {% comment %} <div class="stats-grid">
         <div class="stat-card">
             <h3>{{ total_skills }}</h3>
             <p>Total Skills</p>
@@ -27,7 +27,7 @@
             <h3>{{ completed_tasks }}</h3>
             <p>Completed Tasks</p>
         </div>
-    </div>
+    </div> {% endcomment %}
 
     <div class="profile-actions">
         <a href="{% url 'main_app:profile_edit' %}" class="btn-primary">Edit Profile</a>

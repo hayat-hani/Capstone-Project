@@ -6,22 +6,45 @@
         <h1>Welcome back, {{ user.username }}! </h1>
 
         <!-- statistics overview -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>{{ total_skills }}</h3>
-                <p>Total Skills</p>
+        <div class="stats-section">
+            <h3>📊 Projects Overview</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>{{ total_projects }}</h3>
+                    <p>Total Projects</p>
+                </div>
+                <div class="stat-card">
+                    <h3>{{ total_project_tasks }}</h3>
+                    <p>Project Tasks</p>
+                </div>
+                <div class="stat-card">
+                    <h3>{{ completed_project_tasks }}</h3>
+                    <p>Completed Tasks</p>
+                </div>
+                <div class="stat-card">
+                    <h3>{{ avg_project_progress }}%</h3>
+                    <p>Projects Progress</p>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>{{ total_projects }}</h3>
-                <p>Total Projects</p>
-            </div>
-            <div class="stat-card">
-                <h3>{{ completed_tasks }}</h3>
-                <p>Completed Tasks</p>
-            </div>
-            <div class="stat-card">
-                <h3>{{ completion_rate }}%</h3>
-                <p>Overall Progress</p>
+            
+            <h3>🎯 Skills Overview</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>{{ total_skills }}</h3>
+                    <p>Total Skills</p>
+                </div>
+                <div class="stat-card">
+                    <h3>{{ total_skill_tasks }}</h3>
+                    <p>Skill Tasks</p>
+                </div>
+                <div class="stat-card">
+                    <h3>{{ completed_skill_tasks }}</h3>
+                    <p>Completed Tasks</p>
+                </div>
+                <div class="stat-card">
+                    <h3>{{ avg_skill_progress }}%</h3>
+                    <p>Skills Progress</p>
+                </div>
             </div>
         </div>
 

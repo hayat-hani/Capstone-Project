@@ -29,10 +29,19 @@ def home(request):
           else:
               avg_project_progress = 0
 
-          # calculate task statistics
-          all_tasks = Task.objects.filter(skill__user=request.user) | Task.objects.filter(project__user=request.user)
-          total_tasks = all_tasks.count()
-          completed_tasks = all_tasks.filter(is_completed=True).count()
+          # calculate project task statistics
+          project_tasks = Task.objects.filter(project__user=request.user)
+          total_project_tasks = project_tasks.count()
+          completed_project_tasks = project_tasks.filter(is_completed=True).count()
+          
+          # calculate skill task statistics  
+          skill_tasks = Task.objects.filter(skill__user=request.user)
+          total_skill_tasks = skill_tasks.count()
+          completed_skill_tasks = skill_tasks.filter(is_completed=True).count()
+          
+          # calculate overall task statistics (for backward compatibility)
+          total_tasks = total_project_tasks + total_skill_tasks
+          completed_tasks = completed_project_tasks + completed_skill_tasks
           pending_tasks = total_tasks - completed_tasks
 
           # calculate completion rate
@@ -60,6 +69,12 @@ def home(request):
               'pending_tasks': pending_tasks,
               'completion_rate': completion_rate,
               'recent_reflections': recent_reflections,
+              # Project-specific statistics
+              'total_project_tasks': total_project_tasks,
+              'completed_project_tasks': completed_project_tasks,
+              # Skill-specific statistics
+              'total_skill_tasks': total_skill_tasks,
+              'completed_skill_tasks': completed_skill_tasks,
           }
           return render(request, 'main_app/home.html', context)
       else:

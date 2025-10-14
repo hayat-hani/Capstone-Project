@@ -145,6 +145,8 @@ def user_login(request):
           if user is not None:
               login(request, user)
               return redirect('main_app:home')
+          else:
+              messages.error(request, 'Invalid username or password. Please try again.')
       return render(request, 'main_app/login.html')
 
 

@@ -13,7 +13,10 @@
 
         <div class="form-field">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" required>
+            <div style="position: relative;">
+                <input type="password" name="password" id="password" required style="padding-right: 40px;">
+                <span onclick="togglePassword()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👀</span>
+            </div>
         </div>
 
         <button type="submit" class="btn-primary">🔑 Sign In</button>
@@ -22,4 +25,15 @@
     <p>Don't have an account? <a href="{% url 'main_app:signup' %}">Sign up here</a></p>
     <p><a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Home</a></p>
 </div>
+
+<script>
+function togglePassword() {
+    var passwordField = document.getElementById('password');
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+    } else {
+        passwordField.type = 'password';
+    }
+}
+</script>
 {% endblock %}

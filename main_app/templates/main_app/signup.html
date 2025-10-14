@@ -8,7 +8,17 @@
             {% for field in form %}
                 <div class="form-field">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
+                    {% if 'password' in field.name %}
+                        <div style="position: relative;">
+                            {{ field }}
+                            <span onclick="togglePasswordField('{{ field.id_for_label }}')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👀</span>
+                        </div>
+                        <style>
+                            #{{ field.id_for_label }} { padding-right: 40px !important; }
+                        </style>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
                     {% if field.errors %}
                         <div class="field-errors">
                             {% for error in field.errors %}
@@ -47,4 +57,15 @@
         <p><a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Home</a></p>
 
     </div>
+
+<script>
+function togglePasswordField(fieldId) {
+    var passwordField = document.getElementById(fieldId);
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+    } else {
+        passwordField.type = 'password';
+    }
+}
+</script>
 {% endblock %}

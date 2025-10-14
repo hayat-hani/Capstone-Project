@@ -513,8 +513,17 @@ def delete_account(request):
     if request.method == 'POST':
         user = request.user
         logout(request)
-        user.delete()
-        messages.success(request, 'Your account has been deleted successfully.')
+        try:
+            # handle potential UserProfile foreign key constraint
+            from django.db import connection
+            with connection.cursor() as cursor:
+                # delete any UserProfile records that might exist
+                cursor.execute("DELETE FROM main_app_userprofile WHERE user_id = %s", [user.id])
+            
+            user.delete()
+            messages.success(request, 'Your account has been deleted successfully.')
+        except Exception as e:
+            messages.error(request, 'There was an error deleting your account. Please contact support.')
         return redirect('main_app:home')
     return render(request, 'main_app/delete_account.html')
 

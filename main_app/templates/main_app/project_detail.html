@@ -2,77 +2,88 @@
 
 {% block content %}
 <div class="detail-container">
-    <h2>{{ project.title }}</h2>
-    <p><strong>Description:</strong> {{ project.description }}</p>
-    <p><strong>Progress:</strong> {{ project.progress }}%</p>
+    <div class="detail-layout">
+        <!-- Left Column: Details + Reflections -->
+        <div class="detail-left">
+            <div class="detail-info">
+                <h3>{{ project.title }}</h3>
+                <p><strong>Description:</strong> {{ project.description }}</p>
+                <p><strong>Progress:</strong> {{ project.progress }}%</p>
 
-    <div class="progress-bar">
-        <div class="progress-fill" style="width: {{ project.progress }}%"></div>
-    </div>
-
-    <div class="project-actions">
-        <a href="{% url 'main_app:project_edit' project.id %}" class="btn-edit">Edit Project</a>
-        <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Back to Projects</a>
-    </div>
-
-    <h3>Tasks</h3>
-    <a href="{% url 'main_app:task_create_for_project' project.id %}" class="btn-primary">Add Task</a>
-
-    {% if tasks %}
-        <ul class="task-list">
-        {% for task in tasks %}
-            <li class="task-item {% if task.is_completed %}completed{% endif %}">
-                <div class="task-content">
-                    <h4>{{ task.title }}</h4>
-                    <p>{{ task.description }}</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ project.progress }}%"></div>
                 </div>
-                <div class="task-actions">
-                    <div class="task-toggle-action">
-                        <a href="{% url 'main_app:task_toggle' task.id %}" class="btn-toggle">
-                            {% if task.is_completed %}Mark Incomplete{% else %}Mark Complete{% endif %}
-                        </a>
-                    </div>
-                    <div class="task-edit-actions">
-                        <a href="{% url 'main_app:task_edit' task.id %}" class="btn-edit">Edit</a>
-                        <a href="{% url 'main_app:task_delete' task.id %}" class="btn-delete">Delete</a>
-                    </div>
-                </div>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <div class="empty-state">
-            <p>No tasks added yet. Create your first task to start tracking progress!</p>
-        </div>
-    {% endif %}
 
-
-
-    <h3>Reflections</h3>
-    <a href="{% url 'main_app:reflection_create_for_project' project.id %}" class="btn-primary">Add Reflection</a>
-
-    {% if reflections %}  
-        <div class="reflections-list">
-        {% for reflection in reflections %}
-            <div class="reflection-item">
-                <div class="reflection-content">
-                    <p>{{ reflection.content }}</p>
-                </div>
-                <div class="reflection-date">
-                    <small>{{ reflection.date|date:"F j, Y \a\t g:i A" }}</small>
-                    <div class="reflection-actions">
-                        <a href="{% url 'main_app:reflection_edit' reflection.id %}" class="btn-edit">Edit</a>
-                        <a href="{% url 'main_app:reflection_delete' reflection.id %}" class="btn-delete">Delete</a>
-                    </div>
+                <div class="project-actions">
+                    <a href="{% url 'main_app:project_edit' project.id %}" class="btn-edit">Edit Project</a>
+                    <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Back to Projects</a>
                 </div>
             </div>
-        {% endfor %}
-        </div>
-    {% else %}
-        <div class="empty-state">
-            <p>No reflections added yet. Add a reflection to capture your learning insights!</p>
-        </div>
-    {% endif %}
 
+            <div class="detail-reflections">
+                <h3>Reflections</h3>
+                <a href="{% url 'main_app:reflection_create_for_project' project.id %}" class="btn-primary">Add Reflection</a>
+
+                {% if reflections %}  
+                    <div class="reflections-list">
+                    {% for reflection in reflections %}
+                        <div class="reflection-item">
+                            <div class="reflection-content">
+                                <p>{{ reflection.content }}</p>
+                            </div>
+                            <div class="reflection-date">
+                                <small>{{ reflection.date|date:"F j, Y \a\t g:i A" }}</small>
+                                <div class="reflection-actions">
+                                    <a href="{% url 'main_app:reflection_edit' reflection.id %}" class="btn-edit">Edit</a>
+                                    <a href="{% url 'main_app:reflection_delete' reflection.id %}" class="btn-delete">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <p>No reflections added yet. Add a reflection to capture your learning insights!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Column: Tasks -->
+        <div class="detail-right">
+            <div class="detail-tasks">
+                <h3>Tasks</h3>
+                <a href="{% url 'main_app:task_create_for_project' project.id %}" class="btn-primary">Add Task</a>
+
+                {% if tasks %}
+                    <ul class="task-list">
+                    {% for task in tasks %}
+                        <li class="task-item {% if task.is_completed %}completed{% endif %}">
+                            <div class="task-content">
+                                <h4>{{ task.title }}</h4>
+                                <p>{{ task.description }}</p>
+                            </div>
+                            <div class="task-actions">
+                                <div class="task-toggle-action">
+                                    <a href="{% url 'main_app:task_toggle' task.id %}" class="btn-toggle">
+                                        {% if task.is_completed %}Mark Incomplete{% else %}Mark Complete{% endif %}
+                                    </a>
+                                </div>
+                                <div class="task-edit-actions">
+                                    <a href="{% url 'main_app:task_edit' task.id %}" class="btn-edit">Edit</a>
+                                    <a href="{% url 'main_app:task_delete' task.id %}" class="btn-delete">Delete</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="empty-state">
+                        <p>No tasks added yet. Create your first task to start tracking progress!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -14,55 +14,65 @@
             <img src="{% static 'images/logo.png' %}" alt="SkillHub" class="logo">
             <h1>SkillHub</h1>
           </a>
-          <ul>
-                <li><a href="/">Home</a></li>
-                {%if user.is_authenticated %}
-                    <li><a href="{% url 'main_app:skills_list' %}">Skills</a></li>    
-                    <li><a href="{% url 'main_app:projects_list' %}">Projects</a></li>
-                    <li class="profile-dropdown">
-                        <div class="profile-trigger">
-                            <div class="profile-avatar">
-                                {% if user.first_name %}
-                                    {{ user.first_name.0 }}{{ user.last_name.0 }}
-                                {% else %}
-                                    {{ user.username.0 }}
-                                {% endif %}
+          
+          <!-- Mobile menu toggle button -->
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+          </button>
+          
+          <!-- Navigation menu -->
+          <div class="nav-menu" id="navMenu">
+              <ul>
+                    <li><a href="/" class="nav-link">Home</a></li>
+                    {%if user.is_authenticated %}
+                        <li><a href="{% url 'main_app:skills_list' %}" class="nav-link">Skills</a></li>    
+                        <li><a href="{% url 'main_app:projects_list' %}" class="nav-link">Projects</a></li>
+                        <li class="profile-dropdown">
+                            <div class="profile-trigger">
+                                <div class="profile-avatar">
+                                    {% if user.first_name %}
+                                        {{ user.first_name.0 }}{{ user.last_name.0 }}
+                                    {% else %}
+                                        {{ user.username.0 }}
+                                    {% endif %}
+                                </div>
+                                <span class="profile-name">
+                                    {% if user.first_name %}
+                                        {{ user.first_name }}
+                                    {% else %}
+                                        {{ user.username }}
+                                    {% endif %}
+                                </span>
+                                <span class="dropdown-arrow">▼</span>
                             </div>
-                            <span class="profile-name">
-                                {% if user.first_name %}
-                                    {{ user.first_name }}
-                                {% else %}
-                                    {{ user.username }}
-                                {% endif %}
-                            </span>
-                            <span class="dropdown-arrow">▼</span>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a href="{% url 'main_app:profile' %}" class="dropdown-item">
-                                <span class="dropdown-icon">👤</span> View Profile
-                            </a>
-                            <a href="{% url 'main_app:profile_edit' %}" class="dropdown-item">
-                                <span class="dropdown-icon">✏️</span> Edit Profile
-                            </a>
-                            <a href="{% url 'main_app:change_password' %}" class="dropdown-item">
-                                <span class="dropdown-icon">🔒</span> Change Password
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="{% url 'main_app:delete_account' %}" class="dropdown-item danger">
-                                <span class="dropdown-icon">🗑️</span> Delete Account
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="{% url 'main_app:logout' %}" class="dropdown-item">
-                                <span class="dropdown-icon">🚪</span> Logout
-                            </a>
-                        </div>
-                    </li>
-                {% else %}
-                    <li><a href="{% url 'main_app:login' %}">Login</a></li>
-                    <li><a href="{% url 'main_app:signup' %}">Sign Up</a></li>
-                {% endif %}
-              
-          </ul>
+                            <div class="dropdown-menu">
+                                <a href="{% url 'main_app:profile' %}" class="dropdown-item">
+                                    <span class="dropdown-icon">👤</span> View Profile
+                                </a>
+                                <a href="{% url 'main_app:profile_edit' %}" class="dropdown-item">
+                                    <span class="dropdown-icon">✏️</span> Edit Profile
+                                </a>
+                                <a href="{% url 'main_app:change_password' %}" class="dropdown-item">
+                                    <span class="dropdown-icon">🔒</span> Change Password
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{% url 'main_app:delete_account' %}" class="dropdown-item danger">
+                                    <span class="dropdown-icon">🗑️</span> Delete Account
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{% url 'main_app:logout' %}" class="dropdown-item">
+                                    <span class="dropdown-icon">🚪</span> Logout
+                                </a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'main_app:login' %}" class="nav-link">Login</a></li>
+                        <li><a href="{% url 'main_app:signup' %}" class="nav-link">Sign Up</a></li>
+                    {% endif %}
+              </ul>
+          </div>
       </nav>
 
       <!-- messages section -->
@@ -81,5 +91,65 @@
           {% block content %}
           {% endblock %}
       </main>
+      
+      <script>
+          // Mobile navigation menu toggle
+          document.addEventListener('DOMContentLoaded', function() {
+              const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+              const navMenu = document.getElementById('navMenu');
+              
+              if (mobileMenuToggle && navMenu) {
+                  mobileMenuToggle.addEventListener('click', function() {
+                      navMenu.classList.toggle('active');
+                      mobileMenuToggle.classList.toggle('active');
+                      
+                      // Toggle aria-expanded for accessibility
+                      const isExpanded = navMenu.classList.contains('active');
+                      mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+                  });
+                  
+                  // Close mobile menu when clicking on nav links
+                  const navLinks = navMenu.querySelectorAll('.nav-link');
+                  navLinks.forEach(link => {
+                      link.addEventListener('click', function() {
+                          navMenu.classList.remove('active');
+                          mobileMenuToggle.classList.remove('active');
+                          mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                      });
+                  });
+                  
+                  // Close mobile menu when clicking outside
+                  document.addEventListener('click', function(event) {
+                      const isClickInsideNav = navMenu.contains(event.target) || mobileMenuToggle.contains(event.target);
+                      if (!isClickInsideNav && navMenu.classList.contains('active')) {
+                          navMenu.classList.remove('active');
+                          mobileMenuToggle.classList.remove('active');
+                          mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                      }
+                  });
+              }
+              
+              // Profile dropdown functionality
+              const profileDropdown = document.querySelector('.profile-dropdown');
+              if (profileDropdown) {
+                  const profileTrigger = profileDropdown.querySelector('.profile-trigger');
+                  const dropdownMenu = profileDropdown.querySelector('.dropdown-menu');
+                  
+                  if (profileTrigger && dropdownMenu) {
+                      profileTrigger.addEventListener('click', function(e) {
+                          e.stopPropagation();
+                          profileDropdown.classList.toggle('active');
+                      });
+                      
+                      // Close dropdown when clicking outside
+                      document.addEventListener('click', function(event) {
+                          if (!profileDropdown.contains(event.target)) {
+                              profileDropdown.classList.remove('active');
+                          }
+                      });
+                  }
+              }
+          });
+      </script>
   </body>
   </html>

@@ -10,95 +10,60 @@
             <h1>Welcome back, {{ user.username }}! </h1>
         {% endif %}
 
-        <!-- statistics overview -->
-        <div class="stats-section">
-            <h3>📊 Projects Overview</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>{{ total_projects }}</h3>
-                    <p>Total Projects</p>
+        <!-- overview and quick actions layout -->
+        <div class="overview-layout">
+            <!-- left side: statistics overview -->
+            <div class="stats-section">
+                <h3>📊 Projects Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ total_projects }}</div>
+                        <div class="stat-label">Total Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ total_project_tasks }}</div>
+                        <div class="stat-label">Project Tasks</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ completed_project_tasks }}</div>
+                        <div class="stat-label">Completed Tasks</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ avg_project_progress }}%</div>
+                        <div class="stat-label">Projects Progress</div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3>{{ total_project_tasks }}</h3>
-                    <p>Project Tasks</p>
-                </div>
-                <div class="stat-card">
-                    <h3>{{ completed_project_tasks }}</h3>
-                    <p>Completed Tasks</p>
-                </div>
-                <div class="stat-card">
-                    <h3>{{ avg_project_progress }}%</h3>
-                    <p>Projects Progress</p>
+                
+                <h3>🎯 Skills Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ total_skills }}</div>
+                        <div class="stat-label">Total Skills</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ total_skill_tasks }}</div>
+                        <div class="stat-label">Skill Tasks</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ completed_skill_tasks }}</div>
+                        <div class="stat-label">Completed Tasks</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ avg_skill_progress }}%</div>
+                        <div class="stat-label">Skills Progress</div>
+                    </div>
                 </div>
             </div>
-            
-            <h3>🎯 Skills Overview</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>{{ total_skills }}</h3>
-                    <p>Total Skills</p>
-                </div>
-                <div class="stat-card">
-                    <h3>{{ total_skill_tasks }}</h3>
-                    <p>Skill Tasks</p>
-                </div>
-                <div class="stat-card">
-                    <h3>{{ completed_skill_tasks }}</h3>
-                    <p>Completed Tasks</p>
-                </div>
-                <div class="stat-card">
-                    <h3>{{ avg_skill_progress }}%</h3>
-                    <p>Skills Progress</p>
-                </div>
+
+            <!-- right side: quick actions -->
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <a href="{% url 'main_app:skill_create' %}" class="btn-primary">Add New Skill</a>
+                <a href="{% url 'main_app:project_create' %}" class="btn-primary">Add New Project</a>
+                <a href="{% url 'main_app:skills_list' %}" class="btn-secondary">View All Skills</a>
+                <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">View All Projects</a>
             </div>
         </div>
-
-        <!-- progress overview -->
-        <div class="progress-overview">
-            <div class="progress-section">
-                <h3>Skills Progress</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ avg_skill_progress }}%"></div>
-                </div>
-                <p>{{ avg_skill_progress }}% Average</p>
-            </div>
-
-            <div class="progress-section">
-                <h3>Projects Progress</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ avg_project_progress }}%"></div>
-                </div>
-                <p>{{ avg_project_progress }}% Average</p>
-            </div>
-        </div>
-
-        <!-- quick actions -->
-        <div class="quick-actions">
-            <h3>Quick Actions</h3>
-            <a href="{% url 'main_app:skill_create' %}" class="btn-primary">Add New Skill</a>
-            <a href="{% url 'main_app:project_create' %}" class="btn-primary">Add New Project</a>
-            <a href="{% url 'main_app:skills_list' %}" class="btn-secondary">View All Skills</a>
-            <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">View All Projects</a>
-        </div>
-
-        <!-- recent activity -->
-        {% if recent_reflections %}
-        <div class="recent-activity">
-            <h3>Recent Reflections</h3>
-            {% for reflection in recent_reflections %}
-                <div class="activity-item">
-                    <p>"{{ reflection.content|truncatewords:15 }}"</p>
-                    <small>
-                        {% if reflection.skill %}
-                            on {{ reflection.skill.title }} - {{ reflection.date|date:"M j" }}
-                        {% elif reflection.project %}
-                            on {{ reflection.project.title }} - {{ reflection.date|date:"M j" }}
-                        {% endif %}
-                    </small>
-                </div>
-            {% endfor %}
-        </div>
-        {% endif %}
 
         <!-- preview lists -->
         <div class="preview-sections">
@@ -132,6 +97,27 @@
                 {% endif %}
             </div>
         </div>
+    
+
+        <!-- recent activity -->
+        {% if recent_reflections %}
+        <div class="recent-activity">
+            <h3>Recent Reflections</h3>
+            {% for reflection in recent_reflections %}
+                <div class="activity-item">
+                    <p>"{{ reflection.content|truncatewords:15 }}"</p>
+                    <small>
+                        {% if reflection.skill %}
+                            on {{ reflection.skill.title }} - {{ reflection.date|date:"M j" }}
+                        {% elif reflection.project %}
+                            on {{ reflection.project.title }} - {{ reflection.date|date:"M j" }}
+                        {% endif %}
+                    </small>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
     </div>
     
     {% else %}

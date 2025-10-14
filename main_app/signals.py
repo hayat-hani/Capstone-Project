@@ -6,7 +6,7 @@ from .models import Skill, Project, Task, Reflection
 
 @receiver(post_save, sender=User)
 def create_sample_data(sender, instance, created, **kwargs):
-    """Create sample data for new users to help them get started with SkillHub"""
+    """create sample data for new users to help them get started with SkillHub"""
     if created:  # only for newly created users
         user = instance
         

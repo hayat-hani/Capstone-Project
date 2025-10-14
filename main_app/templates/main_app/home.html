@@ -1,4 +1,5 @@
 {% extends 'main_app/base.html' %}
+{% load static %}
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -136,6 +137,9 @@
     {% else %}
     <!-- non-authenticated users -->
     <div class="landing">
+        <div class="landing-logo">
+            <img src="{% static 'images/logo.png' %}" alt="SkillHub" class="landing-logo-img">
+        </div>
         <h1>Welcome to SkillHub</h1>
         <p>Track your skills, manage projects, and reflect on your learning journey.</p>
         <div class="auth-actions">
@@ -143,5 +147,6 @@
             <a href="{% url 'main_app:login' %}" class="btn-secondary">Login</a>
         </div>
     </div>
+    
 {% endif %}
 {% endblock %}

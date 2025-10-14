@@ -1,32 +1,87 @@
 {% extends 'main_app/base.html' %}
 
-  {% block content %}
-  <div class="form-container">
-      <h2>{{ action }} Skill</h2>
+{% block content %}
+<!-- Skill Create/Edit Form - Professional design -->
+<div class="skill-form-container">
+    <!-- Header section with icon and title -->
+    <div class="form-header">
+        <div class="form-icon">{% if skill %}✏️{% else %}🚀{% endif %}</div>
+        <h2>{{ action }} Skill</h2>
+        <p>{% if skill %}Update your skill information{% else %}Add a new skill to track your progress{% endif %}</p>
+    </div>
 
-      {% comment %} {% if skill %}
-          <p><strong>For Skill:</strong> {{ skill.title }}</p>
-      {% elif project %}
-          <p><strong>For Project:</strong> {{ project.title }}</p>
-      {% elif task.skill %}
-          <p><strong>For Skill:</strong> {{ task.skill.title }}</p>
-      {% elif task.project %}
-          <p><strong>For Project:</strong> {{ task.project.title }}</p>
-      {% endif %} {% endcomment %}
+    <!-- Context info if editing -->
+    {% if skill %}
+    <div class="form-context">
+        <div class="context-icon">📚</div>
+        <div class="context-info">
+            <strong>Editing Skill:</strong>
+            <span class="skill-name">{{ skill.title }}</span>
+        </div>
+    </div>
+    {% endif %}
 
-      {% if skill %}
-      <p><strong>Editing Skill:</strong> {{ skill.title }}</p>
-      {% endif %}
+    <!-- Main form card -->
+    <div class="form-card">
+        <form method="post" class="skill-form">
+            {% csrf_token %}
+            
+            <!-- Title field -->
+            <div class="input-group">
+                <label for="{{ form.title.id_for_label }}" class="input-label">
+                    <span class="label-icon">📝</span>
+                    <span class="label-text">Skill Title</span>
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="error-message">{{ form.title.errors }}</div>
+                {% endif %}
+                <small class="input-help">What skill are you learning? (e.g., Python Programming, Guitar Playing)</small>
+            </div>
 
-      <form method="post">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit" class="btn-primary">{{ action }} Skill</button>
-          {% if skill %}
-            <a href="{% url 'main_app:skill_detail' skill.id %}" class="btn-secondary">Cancel</a>
-          {% else %}
-            <a href="{% url 'main_app:skills_list' %}" class="btn-secondary">Cancel</a>
-          {% endif %}
-      </form>
-  </div>
-  {% endblock %}
+            <!-- Description field -->
+            <div class="input-group">
+                <label for="{{ form.description.id_for_label }}" class="input-label">
+                    <span class="label-icon">📖</span>
+                    <span class="label-text">Description</span>
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="error-message">{{ form.description.errors }}</div>
+                {% endif %}
+                <small class="input-help">Describe what this skill involves and why you want to learn it</small>
+            </div>
+
+            <!-- Category field -->
+            <div class="input-group">
+                <label for="{{ form.category.id_for_label }}" class="input-label">
+                    <span class="label-icon">🏷️</span>
+                    <span class="label-text">Category</span>
+                </label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <div class="error-message">{{ form.category.errors }}</div>
+                {% endif %}
+                <small class="input-help">Optional: Organize your skills by category (e.g., Programming, Music, Languages)</small>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-save">
+                    <span>{% if skill %}💾{% else %}🚀{% endif %}</span>
+                    {{ action }} Skill
+                </button>
+                {% if skill %}
+                    <a href="{% url 'main_app:skill_detail' skill.id %}" class="btn-cancel">
+                        <span>❌</span> Cancel
+                    </a>
+                {% else %}
+                    <a href="{% url 'main_app:skills_list' %}" class="btn-cancel">
+                        <span>❌</span> Cancel
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

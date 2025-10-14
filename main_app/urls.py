@@ -30,4 +30,5 @@ urlpatterns = [
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('profile/change-password/', views.change_password, name='change_password'),
     path('profile/delete-account/', views.delete_account, name='delete_account'),
+    path('profile/clear-sample-data/', views.clear_sample_data, name='clear_sample_data'),
 ]

@@ -1,18 +1,102 @@
 {% extends 'main_app/base.html' %}
 
-  {% block content %}
-  <div class="form-container">
-      <h2>{{ action }} Project </h2>
-      <form method="post">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit" class="btn-primary">{{ action }} Project</button>
-          {% if project %}
-            <a href="{% url 'main_app:project_detail' project.id %}" class="btn-secondary">Cancel</a>
-          {% else %}
-            <a href="{% url 'main_app:projects_list' %}" class="btn-secondary">Cancel</a>
-          {% endif %}
-      </form>
-  </div>
-  {% endblock %}
+{% block content %}
+<!-- Project Create/Edit Form - Professional design -->
+<div class="project-form-container">
+    <!-- Header section with icon and title -->
+    <div class="form-header">
+        <div class="form-icon">{% if project %}✏️{% else %}🚀{% endif %}</div>
+        <h2>{{ action }} Project</h2>
+        <p>{% if project %}Update your project information{% else %}Create a new project to organize your goals and track progress{% endif %}</p>
+    </div>
+
+    <!-- Context info if editing -->
+    {% if project %}
+    <div class="form-context">
+        <div class="context-icon">🎯</div>
+        <div class="context-info">
+            <strong>Editing Project:</strong>
+            <span class="project-name">{{ project.title }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main form card -->
+    <div class="form-card">
+        <form method="post" class="project-form">
+            {% csrf_token %}
+            
+            <!-- Title field -->
+            <div class="input-group">
+                <label for="{{ form.title.id_for_label }}" class="input-label">
+                    <span class="label-icon">🎯</span>
+                    <span class="label-text">Project Title</span>
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="error-message">{{ form.title.errors }}</div>
+                {% endif %}
+                <small class="input-help">What's your project goal? (e.g., "Build a Personal Website", "Learn React Framework")</small>
+            </div>
+
+            <!-- Description field -->
+            <div class="input-group">
+                <label for="{{ form.description.id_for_label }}" class="input-label">
+                    <span class="label-icon">📋</span>
+                    <span class="label-text">Project Description</span>
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="error-message">{{ form.description.errors }}</div>
+                {% endif %}
+                <small class="input-help">Describe your project scope, objectives, and what you want to achieve</small>
+            </div>
+
+            <!-- Project inspiration section -->
+            <div class="project-inspiration">
+                <h4>💡 Project Ideas & Tips:</h4>
+                <div class="inspiration-grid">
+                    <div class="inspiration-item">
+                        <span class="inspiration-icon">💻</span>
+                        <strong>Tech Projects:</strong>
+                        <p>Websites, mobile apps, automation tools</p>
+                    </div>
+                    <div class="inspiration-item">
+                        <span class="inspiration-icon">📚</span>
+                        <strong>Learning Projects:</strong>
+                        <p>Master a new language, framework, or skill</p>
+                    </div>
+                    <div class="inspiration-item">
+                        <span class="inspiration-icon">🎨</span>
+                        <strong>Creative Projects:</strong>
+                        <p>Design portfolios, content creation, art</p>
+                    </div>
+                    <div class="inspiration-item">
+                        <span class="inspiration-icon">💼</span>
+                        <strong>Business Projects:</strong>
+                        <p>Side hustles, startups, professional goals</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-save">
+                    <span>{% if project %}💾{% else %}🚀{% endif %}</span>
+                    {{ action }} Project
+                </button>
+                {% if project %}
+                    <a href="{% url 'main_app:project_detail' project.id %}" class="btn-cancel">
+                        <span>❌</span> Cancel
+                    </a>
+                {% else %}
+                    <a href="{% url 'main_app:projects_list' %}" class="btn-cancel">
+                        <span>❌</span> Cancel
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
 

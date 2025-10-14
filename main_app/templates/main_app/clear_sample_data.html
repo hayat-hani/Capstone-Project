@@ -1,0 +1,49 @@
+{% extends "main_app/base.html" %}
+
+{% block content %}
+<main>
+    <div class="delete-container">
+        {% if has_sample_data %}
+            <h2>🧹 Clear Sample Data</h2>
+            <p>This will remove the sample skills and projects that were automatically created when you signed up.</p>
+            
+            <div class="sample-data-info">
+                <p><strong>Sample data to be removed:</strong></p>
+                <ul style="text-align: left; display: inline-block;">
+                    {% if sample_skills_count > 0 %}
+                        <li>{{ sample_skills_count }} sample skill{{ sample_skills_count|pluralize }} with their tasks and reflections</li>
+                    {% endif %}
+                    {% if sample_projects_count > 0 %}
+                        <li>{{ sample_projects_count }} sample project{{ sample_projects_count|pluralize }} with their tasks and reflections</li>
+                    {% endif %}
+                </ul>
+                
+                <div style="background: rgba(255, 193, 7, 0.1); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <p style="margin: 0; color: #856404;"><strong>⚠️ Note:</strong> This action cannot be undone. Your personal skills and projects will not be affected.</p>
+                </div>
+            </div>
+
+            <form method="post" style="margin-top: 2rem;">
+                {% csrf_token %}
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button type="submit" class="btn-delete">
+                        🗑️ Yes, Clear Sample Data
+                    </button>
+                    <a href="{% url 'main_app:profile' %}" class="btn-secondary">
+                        ↩️ Cancel
+                    </a>
+                </div>
+            </form>
+        {% else %}
+            <h2>✨ No Sample Data Found</h2>
+            <p>You don't have any sample data to clear. All your skills and projects appear to be personally created.</p>
+            
+            <div style="margin-top: 2rem;">
+                <a href="{% url 'main_app:profile' %}" class="btn-primary">
+                    ↩️ Back to Profile
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

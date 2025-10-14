@@ -2,21 +2,21 @@
 
 {% block content %}
 <div class="auth-container">
-    <h2>Login</h2>
+    <h2>🔐 Login</h2>
 
     <form method="post">
         {% csrf_token %}
-        <p>
-            <label>Username:</label>
-            <input type="text" name="username" required>
-        </p>
+        <div class="form-field">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+        </div>
 
-        <p>
-            <label>Password:</label>
-            <input type="password" name="password" required>
-        </p>
+        <div class="form-field">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+        </div>
 
-        <button type="submit" class="btn-primary">Login</button>
+        <button type="submit" class="btn-primary">🔑 Sign In</button>
     </form>
     
     <p>Don't have an account? <a href="{% url 'main_app:signup' %}">Sign up here</a></p>

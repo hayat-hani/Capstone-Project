@@ -1,56 +1,92 @@
 {% extends 'main_app/base.html' %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Edit Profile</h2>
+<!-- Profile Edit Page - Making it look nice and professional -->
+<div class="profile-form-container">
+    <!-- Header section with icon and title -->
+    <div class="form-header">
+        <div class="form-icon">✏️</div>
+        <h2>Edit Profile</h2>
+        <p>Update your personal information</p>
+    </div>
 
+    <!-- Show success/error messages if any -->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
+            <div class="message-alert message-{{ message.tags }}">
+                <span class="message-icon">
+                    {% if message.tags == 'success' %}✅{% else %}❌{% endif %}
+                </span>
                 {{ message }}
             </div>
         {% endfor %}
     {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="{{ form.username.id_for_label }}">{{ form.username.label }}:</label>
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="error">{{ form.username.errors }}</div>
-            {% endif %}
-        </div>
+    <!-- Main form card -->
+    <div class="form-card">
+        <form method="post" class="profile-form">
+            {% csrf_token %}
+            
+            <!-- Username field -->
+            <div class="input-group">
+                <label for="{{ form.username.id_for_label }}" class="input-label">
+                    <span class="label-icon">👤</span>
+                    {{ form.username.label }}
+                </label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error-message">{{ form.username.errors }}</div>
+                {% endif %}
+                <small class="input-help">This is how you'll log in</small>
+            </div>
 
-        <div class="form-group">
-            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="error">{{ form.email.errors }}</div>
-            {% endif %}
-        </div>
+            <!-- Email field -->
+            <div class="input-group">
+                <label for="{{ form.email.id_for_label }}" class="input-label">
+                    <span class="label-icon">📧</span>
+                    {{ form.email.label }}
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors }}</div>
+                {% endif %}
+                <small class="input-help">We'll never share your email</small>
+            </div>
 
-        <div class="form-group">
-            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}:</label>
-            {{ form.first_name }}
-            {% if form.first_name.errors %}
-                <div class="error">{{ form.first_name.errors }}</div>
-            {% endif %}
-        </div>
+            <!-- First name field -->
+            <div class="input-group">
+                <label for="{{ form.first_name.id_for_label }}" class="input-label">
+                    <span class="label-icon">🏷️</span>
+                    {{ form.first_name.label }}
+                </label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                    <div class="error-message">{{ form.first_name.errors }}</div>
+                {% endif %}
+            </div>
 
-        <div class="form-group">
-            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}:</label>
-            {{ form.last_name }}
-            {% if form.last_name.errors %}
-                <div class="error">{{ form.last_name.errors }}</div>
-            {% endif %}
-        </div>
+            <!-- Last name field -->
+            <div class="input-group">
+                <label for="{{ form.last_name.id_for_label }}" class="input-label">
+                    <span class="label-icon">🏷️</span>
+                    {{ form.last_name.label }}
+                </label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                    <div class="error-message">{{ form.last_name.errors }}</div>
+                {% endif %}
+            </div>
 
-        <button type="submit" class="btn-primary">Update Profile</button>
-    </form>
-
-    <div class="profile-actions">
-        <a href="{% url 'main_app:profile' %}" class="btn-secondary">Cancel</a>
+            <!-- Form buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-save">
+                    <span>💾</span> Update Profile
+                </button>
+                <a href="{% url 'main_app:profile' %}" class="btn-cancel">
+                    <span>❌</span> Cancel
+                </a>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

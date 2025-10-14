@@ -517,3 +517,68 @@ def delete_account(request):
         messages.success(request, 'Your account has been deleted successfully.')
         return redirect('main_app:home')
     return render(request, 'main_app/delete_account.html')
+
+
+@login_required
+def clear_sample_data(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        # sample data identifiers - these specific titles indicate sample data
+        sample_skill_titles = [
+            "Learn Web Development",
+            "Data Analysis with Python", 
+            "Improve Public Speaking"
+        ]
+        
+        sample_project_titles = [
+            "Personal Tech Blog",
+            "Personal Fitness Tracker App",
+            "Annual Reading Challenge"
+        ]
+        
+        # delete sample skills and their related tasks/reflections
+        deleted_skills = 0
+        for title in sample_skill_titles:
+            skills = Skill.objects.filter(user=user, title=title)
+            deleted_skills += skills.count()
+            skills.delete()  # this will cascade delete tasks and reflections
+        
+        # delete sample projects and their related tasks/reflections
+        deleted_projects = 0
+        for title in sample_project_titles:
+            projects = Project.objects.filter(user=user, title=title)
+            deleted_projects += projects.count()
+            projects.delete()  # this will cascade delete tasks and reflections
+        
+        if deleted_skills > 0 or deleted_projects > 0:
+            messages.success(request, f'Sample data cleared! Removed {deleted_skills} skills and {deleted_projects} projects.')
+        else:
+            messages.info(request, 'No sample data found to clear.')
+            
+        return redirect('main_app:profile')
+    
+    # get count of sample data for confirmation page
+    user = request.user
+    sample_skill_titles = [
+        "Learn Web Development",
+        "Data Analysis with Python", 
+        "Improve Public Speaking"
+    ]
+    
+    sample_project_titles = [
+        "Personal Tech Blog",
+        "Personal Fitness Tracker App", 
+        "Annual Reading Challenge"
+    ]
+    
+    sample_skills_count = Skill.objects.filter(user=user, title__in=sample_skill_titles).count()
+    sample_projects_count = Project.objects.filter(user=user, title__in=sample_project_titles).count()
+    
+    context = {
+        'sample_skills_count': sample_skills_count,
+        'sample_projects_count': sample_projects_count,
+        'has_sample_data': sample_skills_count > 0 or sample_projects_count > 0
+    }
+    
+    return render(request, 'main_app/clear_sample_data.html', context)

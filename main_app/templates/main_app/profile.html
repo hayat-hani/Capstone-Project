@@ -1,39 +1,105 @@
 {% extends 'main_app/base.html' %}
 
 {% block content %}
-<div class="detail-container">
-    <h2>User Profile</h2>
-
-    <div class="profile-info">
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        {% if user.first_name or user.last_name %}
-          <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-        {% endif %}
-        <p><strong>Member since:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar-large">
+            {% if user.first_name %}
+                {{ user.first_name.0 }}{{ user.last_name.0 }}
+            {% else %}
+                {{ user.username.0 }}
+            {% endif %}
+        </div>
+        <div class="profile-header-info">
+            <h1 class="profile-title">
+                {% if user.first_name %}
+                    {{ user.first_name }} {{ user.last_name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+            </h1>
+            <p class="profile-subtitle">@{{ user.username }}</p>
+            <p class="profile-member-since">Member since {{ user.date_joined|date:"F j, Y" }}</p>
+        </div>
     </div>
 
-    {% comment %} <div class="stats-grid">
-        <div class="stat-card">
-            <h3>{{ total_skills }}</h3>
-            <p>Total Skills</p>
+    <!-- Profile Details Card -->
+    <div class="profile-card">
+        <div class="card-header">
+            <h3>👤 Personal Information</h3>
         </div>
-        <div class="stat-card">
-            <h3>{{ total_projects }}</h3>
-            <p>Total Projects</p>
+        <div class="profile-details">
+            <div class="detail-row">
+                <span class="detail-label">Full Name</span>
+                <span class="detail-value">
+                    {% if user.first_name or user.last_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                        Not set
+                    {% endif %}
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Username</span>
+                <span class="detail-value">{{ user.username }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Email Address</span>
+                <span class="detail-value">{{ user.email }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Account Created</span>
+                <span class="detail-value">{{ user.date_joined|date:"F j, Y \a\t g:i A" }}</span>
+            </div>
         </div>
-        <div class="stat-card">
-            <h3>{{ total_tasks }}</h3>
-            <p>Total Tasks</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ completed_tasks }}</h3>
-            <p>Completed Tasks</p>
-        </div>
-    </div> {% endcomment %}
+    </div>
 
-    <div class="profile-actions">
-        <a href="{% url 'main_app:home' %}" class="btn-secondary">Back to Dashboard</a>
+    <!-- Statistics Card -->
+    <div class="profile-card">
+        <div class="card-header">
+            <h3>📊 Your Statistics</h3>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">{{ total_skills }}</div>
+                <div class="stat-label">Skills</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ total_projects }}</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ total_tasks }}</div>
+                <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ completed_tasks }}</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Management Card -->
+    <div class="profile-card">
+        <div class="card-header">
+            <h3>⚙️ Account Management</h3>
+        </div>
+        <div class="profile-actions">
+            <a href="{% url 'main_app:clear_sample_data' %}" class="btn-warning" style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);">
+                🧹 Clear Sample Data
+            </a>
+            <small style="color: #666; margin-top: 0.8rem; display: block;">
+                Remove the example skills and projects that were created when you signed up
+            </small>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="profile-navigation">
+        <a href="{% url 'main_app:home' %}" class="btn-back">
+            <span>←</span> Back to Dashboard
+        </a>
     </div>
 </div>
 {% endblock %}

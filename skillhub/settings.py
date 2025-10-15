@@ -91,12 +91,18 @@ if 'ON_HEROKU' in os.environ:
             ssl_require=True,
         ),
     }
+elif os.getenv('USE_SQLITE'):
+      DATABASES = {
+          'default': {
+              'ENGINE': 'django.db.backends.sqlite3',
+              'NAME': BASE_DIR / 'db.sqlite3',
+          }
+      }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'skillhub_db',
-            # The value of 'NAME' should match the value of 'NAME' you replaced.
         }
     }
 

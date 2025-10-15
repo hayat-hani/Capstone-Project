@@ -67,45 +67,38 @@
             </div>
 
             <!-- Project inspiration section -->
-            <div class="project-inspiration">
-                <h4>💡 Project Ideas & Tips:</h4>
-                <div class="inspiration-grid">
-                    <div class="inspiration-item">
-                        <span class="inspiration-icon">💻</span>
-                        <strong>Tech Projects:</strong>
-                        <p>Websites, mobile apps, automation tools</p>
-                    </div>
-                    <div class="inspiration-item">
-                        <span class="inspiration-icon">📚</span>
-                        <strong>Learning Projects:</strong>
-                        <p>Master a new language, framework, or skill</p>
-                    </div>
-                    <div class="inspiration-item">
-                        <span class="inspiration-icon">🎨</span>
-                        <strong>Creative Projects:</strong>
-                        <p>Design portfolios, content creation, art</p>
-                    </div>
-                    <div class="inspiration-item">
-                        <span class="inspiration-icon">💼</span>
-                        <strong>Business Projects:</strong>
-                        <p>Side hustles, startups, professional goals</p>
-                    </div>
-                </div>
-            </div>
 
             <!-- Action buttons -->
             <div class="form-buttons">
                 <button type="submit" class="btn-save">
-                    <span>{% if project %}💾{% else %}🚀{% endif %}</span>
+                    <span>
+                        {% if project %}
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                            </svg>
+                        {% else %}
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        {% endif %}
+                    </span>
                     {{ action }} Project
                 </button>
                 {% if project %}
                     <a href="{% url 'main_app:project_detail' project.id %}" class="btn-cancel">
-                        <span>❌</span> Cancel
+                        <span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </span> Cancel
                     </a>
                 {% else %}
                     <a href="{% url 'main_app:projects_list' %}" class="btn-cancel">
-                        <span>❌</span> Cancel
+                        <span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </span> Cancel
                     </a>
                 {% endif %}
             </div>

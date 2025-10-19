@@ -82,7 +82,9 @@ WSGI_APPLICATION = 'skillhub.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
 if 'ON_HEROKU' in os.environ:
+    # Use Heroku Postgres
     DATABASES = {
         "default": dj_database_url.config(
             env='DATABASE_URL',
@@ -91,18 +93,16 @@ if 'ON_HEROKU' in os.environ:
             ssl_require=True,
         ),
     }
-elif os.getenv('USE_SQLITE'):
-      DATABASES = {
-          'default': {
-              'ENGINE': 'django.db.backends.sqlite3',
-              'NAME': BASE_DIR / 'db.sqlite3',
-          }
-      }
 else:
+    # Local PostgreSQL connection
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'skillhub_db',
+            'NAME': 'skillhub_db',       
+            'USER': 'postgres',          
+            'PASSWORD': 'your_password', 
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
 

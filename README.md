@@ -254,7 +254,6 @@ SkillHub addresses the common challenge of maintaining momentum in personal deve
 ### Potential Features
 - **Data Visualization:** Charts and graphs for progress analytics
 - **File Uploads:** Attach documents or images to skills/projects
-- **Search & Filter:** Find skills/projects by category or keyword
 - **Goal Setting:** Set target completion dates and deadlines
 - **Export Features:** Generate PDF reports or CSV data exports
 - **Collaboration:** Share skills/projects with other users

@@ -15,13 +15,15 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
-SECRET_KEY = config('SECRET_KEY', default='your_local_secret_key')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # DEBUG
 DEBUG = config('DEBUG', default=True, cast=bool)
+if not 'ON_HEROKU' in os.environ:
+    DEBUG = True
 
 # Allowed hosts
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -85,6 +87,8 @@ else:
             'PORT': '5432',
         }
     }
+
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
